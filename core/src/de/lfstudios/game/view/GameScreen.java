@@ -8,13 +8,15 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.lfstudios.game.Despair;
@@ -34,7 +36,6 @@ public class GameScreen implements Screen
 	private Music backgroundMusic;
 	private Music backButtonSound;
 	private TiledMap map;
-	private TiledMapTileSet tileSet;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private Player player;
 
@@ -42,11 +43,13 @@ public class GameScreen implements Screen
 	private Skin attackButtonSkin;
 	private ImageButton.ImageButtonStyle attackButtonStyle;
 	private Drawable attackButtonDrawable;
+	private Drawable attackButtonActiveDrawable;
 
 	private ImageButton blockButton;
 	private Skin blockButtonSkin;
 	private ImageButton.ImageButtonStyle blockButtonStyle;
 	private Drawable blockButtonDrawable;
+	private Drawable blockButtonActiveDrawable;
 
 	public GameScreen(Despair game)
 	{
@@ -77,27 +80,69 @@ public class GameScreen implements Screen
 		this.setupMap();
 
 		this.player = new Player();
-		this.player.setPosition(192 * 5, 416 * 5);
+		this.player.setPosition(0, 0);
 
 		this.attackButtonSkin = new Skin();
-		this.attackButtonSkin.add("icon", new Texture(Gdx.files.internal("game/button_atk.png")));
+		this.attackButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_atk.png")));
+		this.attackButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_atk_a.png")));
 		this.attackButtonStyle = new ImageButton.ImageButtonStyle();
-		this.attackButtonDrawable = this.attackButtonSkin.getDrawable("icon");
+		this.attackButtonDrawable = this.attackButtonSkin.getDrawable("inactive");
 		this.attackButtonDrawable.setMinWidth(70);
 		this.attackButtonDrawable.setMinHeight(70);
+		this.attackButtonActiveDrawable = this.attackButtonSkin.getDrawable("active");
+		this.attackButtonActiveDrawable.setMinWidth(70);
+		this.attackButtonActiveDrawable.setMinHeight(70);
 		this.attackButtonStyle.imageUp = this.attackButtonDrawable;
+		this.attackButtonStyle.imageDown = this.attackButtonActiveDrawable;
 		this.attackButton = new ImageButton(this.attackButtonStyle);
 		this.attackButton.setBounds(0, 0, 120, 120);
 
+		this.attackButton.addListener( new InputListener()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				player.attack();
+				return false;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
+			{
+				//
+			}
+		});
+
+
 		this.blockButtonSkin = new Skin();
-		this.blockButtonSkin.add("icon", new Texture(Gdx.files.internal("game/button_def.png")));
+		this.blockButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_def.png")));
+		this.blockButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_def_a.png")));
 		this.blockButtonStyle = new ImageButton.ImageButtonStyle();
-		this.blockButtonDrawable = this.blockButtonSkin.getDrawable("icon");
+		this.blockButtonDrawable = this.blockButtonSkin.getDrawable("inactive");
 		this.blockButtonDrawable.setMinWidth(70);
 		this.blockButtonDrawable.setMinHeight(70);
+		this.blockButtonActiveDrawable = this.blockButtonSkin.getDrawable("active");
+		this.blockButtonActiveDrawable.setMinWidth(70);
+		this.blockButtonActiveDrawable.setMinHeight(70);
 		this.blockButtonStyle.imageUp = this.blockButtonDrawable;
+		this.blockButtonStyle.imageDown = this.blockButtonActiveDrawable;
 		this.blockButton = new ImageButton(this.blockButtonStyle);
 		this.blockButton.setBounds(0, 0, 120, 120);
+
+		this.blockButton.addListener( new InputListener()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				player.block();
+				return false;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
+			{
+				//
+			}
+
+		});
+
+
 
 		this.stage.addActor(this.touchpad);
 		this.stage.addActor(this.attackButton);
@@ -108,7 +153,6 @@ public class GameScreen implements Screen
 	private void setupMap()
 	{
 		this.map = new TmxMapLoader().load("game/map/scene1.tmx");
-		this.tileSet =  this.map.getTileSets().getTileSet("ground");
 		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, 5);
 	}
 
@@ -178,20 +222,7 @@ public class GameScreen implements Screen
 
 	private void updatePlayer()
 	{
-		if(Gdx.input.isTouched())
-		{
-			this.player.setPosX(this.player.getPosX() + this.touchpad.getKnobPercentX() * 4);
-			this.player.setPosY(this.player.getPosY() + this.touchpad.getKnobPercentY() * 4);
-		}
-
-		this.player.setAnimationType(this.touchpad.getKnobPercentX(),
-									 this.touchpad.getKnobPercentY());
-
-		// prepare current player frame
-		this.player.setStateTime(this.player.getStateTime() + Gdx.graphics.getDeltaTime());
-		this.player.setCurrentFrame(this.player.getCurrentAnimation()
-											   .getKeyFrame(this.player.getStateTime(),
-															true));
+		this.player.update(this.touchpad);
 	}
 
 	private void clearScreen()
