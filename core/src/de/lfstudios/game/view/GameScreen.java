@@ -16,11 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.lfstudios.game.Despair;
-import de.lfstudios.game.core.Player;
+import de.lfstudios.game.core.player.Player;
 
 public class GameScreen implements Screen
 {
@@ -37,19 +36,21 @@ public class GameScreen implements Screen
 	private Music backButtonSound;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer mapRenderer;
+	private int mapPixelWidth;
+	private int mapPixelHeight;
 	private Player player;
-
 	private ImageButton attackButton;
 	private Skin attackButtonSkin;
 	private ImageButton.ImageButtonStyle attackButtonStyle;
 	private Drawable attackButtonDrawable;
 	private Drawable attackButtonActiveDrawable;
-
 	private ImageButton blockButton;
 	private Skin blockButtonSkin;
 	private ImageButton.ImageButtonStyle blockButtonStyle;
 	private Drawable blockButtonDrawable;
 	private Drawable blockButtonActiveDrawable;
+
+	private final static int MAP_SCALE = 5;
 
 	public GameScreen(Despair game)
 	{
@@ -80,7 +81,7 @@ public class GameScreen implements Screen
 		this.setupMap();
 
 		this.player = new Player();
-		this.player.setPosition(0, 0);
+		this.player.setPosition(700, 750);
 
 		this.attackButtonSkin = new Skin();
 		this.attackButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_atk.png")));
@@ -102,12 +103,12 @@ public class GameScreen implements Screen
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 			{
 				player.attack();
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
 			{
-				//
+
 			}
 		});
 
@@ -132,17 +133,15 @@ public class GameScreen implements Screen
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 			{
 				player.block();
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
 			{
-				//
+				player.setBlockReleased(true);
 			}
 
 		});
-
-
 
 		this.stage.addActor(this.touchpad);
 		this.stage.addActor(this.attackButton);
@@ -153,7 +152,19 @@ public class GameScreen implements Screen
 	private void setupMap()
 	{
 		this.map = new TmxMapLoader().load("game/map/scene1.tmx");
-		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, 5);
+		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, this.MAP_SCALE);
+
+		this.mapPixelWidth = this.map.getProperties()
+									 .get("width", Integer.class) *
+							 this.map.getProperties()
+									 .get("tilewidth", Integer.class) *
+							 this.MAP_SCALE;
+
+		this.mapPixelHeight = this.map.getProperties()
+									  .get("height", Integer.class) *
+							  this.map.getProperties()
+									  .get("tileheight", Integer.class) *
+							  this.MAP_SCALE;
 	}
 
 	@Override
@@ -196,6 +207,17 @@ public class GameScreen implements Screen
 			.position.set(this.player.getPosX() + (this.player.getCurrentFrame().getRegionWidth() / 2),
 						  this.player.getPosY() + (this.player.getCurrentFrame().getRegionHeight() / 2),
 						  0);
+
+		float camerax1 = this.camera.position.x - (this.camera.viewportWidth / 2);
+		float camerax2 = this.camera.position.x + (this.camera.viewportWidth / 2);
+		float cameray1 = this.camera.position.y - (this.camera.viewportHeight / 2);
+		float cameray2 = this.camera.position.y + (this.camera.viewportHeight / 2);
+
+		if(camerax1 < 0) this.camera.position.set(this.camera.viewportWidth / 2, this.camera.position.y, 0);
+		if(cameray1 < 0) this.camera.position.set(this.camera.position.x, this.camera.viewportHeight / 2, 0);
+		if(camerax2 > this.mapPixelWidth) this.camera.position.set(this.mapPixelWidth - (this.camera.viewportWidth / 2), this.camera.position.y, 0);
+		if(cameray2 > this.mapPixelHeight) this.camera.position.set(this.camera.position.x, this.mapPixelHeight - (this.camera.viewportHeight / 2), 0);
+
 		this.camera.update();
 	}
 
