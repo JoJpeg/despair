@@ -246,7 +246,6 @@ public class Action
 	 */
 	public Animation getCurrentAnimation()
 	{
-//		System.out.println("DIR: " + this.getDirection());
 		if(this.getDirection() == 1) return this.downAnimation;
 		if(this.getDirection() == 2) return this.upAnimation;
 		if(this.getDirection() == 3) return this.leftAnimation;

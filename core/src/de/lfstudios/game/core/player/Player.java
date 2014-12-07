@@ -26,7 +26,6 @@ public class Player
 
 	public Player()
 	{
-
 		this.standAction = new Action("game/player_run_0.png",
 									  8,
 									  4,
@@ -104,9 +103,9 @@ public class Player
 									   0.2f,
 									   false);
 
-		this.blockAction = new Action("game/player_def.png",
+		this.blockAction = new Action("game/player_def_0.png",
 									  8,
-									  8,
+									  4,
 									  0.075f,
 									  new int[][]
 										  {
@@ -149,7 +148,9 @@ public class Player
 		Vector2 v = new Vector2(x, y);
 		float angle = v.angle(new Vector2(0,1));
 
-		if( angle == 0) { this.setCurrentAction(this.standAction); // standing
+		if( angle == 0)
+		{
+			this.setCurrentAction(this.standAction); // standing
 		}
 		else if(angle >=  157.5 || angle <= -157.5)
 		{
@@ -183,9 +184,6 @@ public class Player
 		{
 			this.updateActionDirections(2); // facing up
 		}
-
-
-
 
 		if(v.len() > 0.5f && angle != 0)
 		{

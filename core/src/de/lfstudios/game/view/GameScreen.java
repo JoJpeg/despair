@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -50,7 +52,14 @@ public class GameScreen implements Screen
 	private Drawable blockButtonDrawable;
 	private Drawable blockButtonActiveDrawable;
 
-	private final static int MAP_SCALE = 5;
+	private static final String MAP_DARK = "dark";
+	private static final String MAP_LIGHT = "light";
+	private static final String MAP_COLLISION_DARK = "collision_dark";
+	private static final String MAP_COLLISION_LIGHT = "collision_light";
+	private static final String MAP_HOLE_DARK = "hole_dark";
+	private static final String MAP_HOLE_LIGHT = "hole_light";
+
+	private final static int MAP_SCALE = 4;
 
 	public GameScreen(Despair game)
 	{
@@ -80,8 +89,9 @@ public class GameScreen implements Screen
 
 		this.setupMap();
 
+
 		this.player = new Player();
-		this.player.setPosition(700, 750);
+		this.player.setPosition(777 * this.MAP_SCALE, 3920 * this.MAP_SCALE);
 
 		this.attackButtonSkin = new Skin();
 		this.attackButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_atk.png")));
@@ -112,7 +122,6 @@ public class GameScreen implements Screen
 			}
 		});
 
-
 		this.blockButtonSkin = new Skin();
 		this.blockButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_def.png")));
 		this.blockButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_def_a.png")));
@@ -132,15 +141,16 @@ public class GameScreen implements Screen
 		{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 			{
+				map.getLayers().get(MAP_LIGHT).setVisible(true);
 				player.block();
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
 			{
+				map.getLayers().get(MAP_LIGHT).setVisible(false);
 				player.setBlockReleased(true);
 			}
-
 		});
 
 		this.stage.addActor(this.touchpad);
@@ -151,7 +161,8 @@ public class GameScreen implements Screen
 
 	private void setupMap()
 	{
-		this.map = new TmxMapLoader().load("game/map/scene1.tmx");
+		this.map = new TmxMapLoader().load("game/map/map.tmx");
+		this.map.getLayers().get(this.MAP_LIGHT).setVisible(false);
 		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, this.MAP_SCALE);
 
 		this.mapPixelWidth = this.map.getProperties()
@@ -165,6 +176,8 @@ public class GameScreen implements Screen
 							  this.map.getProperties()
 									  .get("tileheight", Integer.class) *
 							  this.MAP_SCALE;
+
+
 	}
 
 	@Override
@@ -188,8 +201,8 @@ public class GameScreen implements Screen
 
 		this.stage.draw();
 
-
-		if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK))
+		{
 			this.exit();
 		}
 	}
@@ -198,7 +211,6 @@ public class GameScreen implements Screen
 	{
 		this.mapRenderer.setView(this.camera);
 		this.mapRenderer.render();
-
 	}
 
 	private void updateCamera()
@@ -288,7 +300,6 @@ public class GameScreen implements Screen
 	public void dispose()
 	{
 		this.backgroundMusic.stop();
-
 		this.spriteBatch.dispose();
 		this.touchpadSkin.dispose();
 		this.stage.dispose();
@@ -301,13 +312,15 @@ public class GameScreen implements Screen
 	private void exit()
 	{
 		this.backButtonSound.setVolume(0.1f);
-		this.backButtonSound.setOnCompletionListener(new Music.OnCompletionListener() {
+		this.backButtonSound.setOnCompletionListener(new Music.OnCompletionListener()
+		{
 			@Override
 			public void onCompletion(Music music)
 			{
-			backButtonSound.dispose();
+				backButtonSound.dispose();
 			}
 		});
+
 		this.backButtonSound.play();
 		this.dispose();
 		this.game.openMenu();
