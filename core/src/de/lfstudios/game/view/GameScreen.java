@@ -8,10 +8,8 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.*;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,11 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.lfstudios.game.Despair;
+import de.lfstudios.game.core.player.Map;
 import de.lfstudios.game.core.player.Player;
 
 public class GameScreen implements Screen
 {
-
 	private Despair game;
 	private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
@@ -36,10 +34,7 @@ public class GameScreen implements Screen
 	private Stage stage;
 	private Music backgroundMusic;
 	private Music backButtonSound;
-	private TiledMap map;
-	private OrthogonalTiledMapRenderer mapRenderer;
-	private int mapPixelWidth;
-	private int mapPixelHeight;
+	private Map map;
 	private Player player;
 	private ImageButton attackButton;
 	private Skin attackButtonSkin;
@@ -52,14 +47,13 @@ public class GameScreen implements Screen
 	private Drawable blockButtonDrawable;
 	private Drawable blockButtonActiveDrawable;
 
-	private static final String MAP_DARK = "dark";
-	private static final String MAP_LIGHT = "light";
-	private static final String MAP_COLLISION_DARK = "collision_dark";
-	private static final String MAP_COLLISION_LIGHT = "collision_light";
-	private static final String MAP_HOLE_DARK = "hole_dark";
-	private static final String MAP_HOLE_LIGHT = "hole_light";
 
-	private final static int MAP_SCALE = 4;
+
+
+	private BodyDef groundDef;
+	private Body groundBody;
+
+
 
 	public GameScreen(Despair game)
 	{
@@ -84,14 +78,13 @@ public class GameScreen implements Screen
 		this.touchpadStyle.knob = this.touchKnob;
 		this.touchpad = new Touchpad(10, this.touchpadStyle);
 		this.touchpad.setBounds(40, Gdx.graphics.getHeight() - 290, 350, 350);
-
 		this.stage = new Stage(new ScreenViewport(this.camera), this.spriteBatch);
 
-		this.setupMap();
-
-
+		this.map = new Map();
 		this.player = new Player();
-		this.player.setPosition(777 * this.MAP_SCALE, 3920 * this.MAP_SCALE);
+		this.player.setPosition(777 * this.map.getMapScale(), 3920 * this.map.getMapScale());
+
+		this.map.add(this.player);
 
 		this.attackButtonSkin = new Skin();
 		this.attackButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_atk.png")));
@@ -141,14 +134,14 @@ public class GameScreen implements Screen
 		{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 			{
-				map.getLayers().get(MAP_LIGHT).setVisible(true);
+				map.getTiledMap().getLayers().get(map.getMapLight()).setVisible(true);
 				player.block();
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
 			{
-				map.getLayers().get(MAP_LIGHT).setVisible(false);
+				map.getTiledMap().getLayers().get(map.getMapLight()).setVisible(false);
 				player.setBlockReleased(true);
 			}
 		});
@@ -157,27 +150,6 @@ public class GameScreen implements Screen
 		this.stage.addActor(this.attackButton);
 		this.stage.addActor(this.blockButton);
 		Gdx.input.setInputProcessor(this.stage);
-	}
-
-	private void setupMap()
-	{
-		this.map = new TmxMapLoader().load("game/map/map.tmx");
-		this.map.getLayers().get(this.MAP_LIGHT).setVisible(false);
-		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, this.MAP_SCALE);
-
-		this.mapPixelWidth = this.map.getProperties()
-									 .get("width", Integer.class) *
-							 this.map.getProperties()
-									 .get("tilewidth", Integer.class) *
-							 this.MAP_SCALE;
-
-		this.mapPixelHeight = this.map.getProperties()
-									  .get("height", Integer.class) *
-							  this.map.getProperties()
-									  .get("tileheight", Integer.class) *
-							  this.MAP_SCALE;
-
-
 	}
 
 	@Override
@@ -189,7 +161,7 @@ public class GameScreen implements Screen
 		this.updateTouchpad();
 		this.updateButtons();
 		this.updateCamera();
-
+		
 		//draw
 		this.spriteBatch.begin();
 		this.spriteBatch.draw(this.player.getCurrentFrame(),
@@ -209,8 +181,10 @@ public class GameScreen implements Screen
 
 	private void updateMap()
 	{
-		this.mapRenderer.setView(this.camera);
-		this.mapRenderer.render();
+		this.map.getMapRenderer().setView(this.camera);
+		this.map.getMapRenderer().render();
+
+		this.map.updatePhysics(this.camera);
 	}
 
 	private void updateCamera()
@@ -227,8 +201,8 @@ public class GameScreen implements Screen
 
 		if(camerax1 < 0) this.camera.position.set(this.camera.viewportWidth / 2, this.camera.position.y, 0);
 		if(cameray1 < 0) this.camera.position.set(this.camera.position.x, this.camera.viewportHeight / 2, 0);
-		if(camerax2 > this.mapPixelWidth) this.camera.position.set(this.mapPixelWidth - (this.camera.viewportWidth / 2), this.camera.position.y, 0);
-		if(cameray2 > this.mapPixelHeight) this.camera.position.set(this.camera.position.x, this.mapPixelHeight - (this.camera.viewportHeight / 2), 0);
+		if(camerax2 > this.map.getMapPixelWidth()) this.camera.position.set(this.map.getMapPixelWidth() - (this.camera.viewportWidth / 2), this.camera.position.y, 0);
+		if(cameray2 > this.map.getMapPixelHeight()) this.camera.position.set(this.camera.position.x, this.map.getMapPixelHeight() - (this.camera.viewportHeight / 2), 0);
 
 		this.camera.update();
 	}
@@ -257,6 +231,10 @@ public class GameScreen implements Screen
 	private void updatePlayer()
 	{
 		this.player.update(this.touchpad);
+
+		this.player.setPosX(this.player.getBody().getPosition().x * this.map.getBoxToWorld());
+		this.player.setPosY(this.player.getBody().getPosition().y * this.map.getBoxToWorld());
+
 	}
 
 	private void clearScreen()
@@ -304,9 +282,8 @@ public class GameScreen implements Screen
 		this.touchpadSkin.dispose();
 		this.stage.dispose();
 		this.player.dispose();
-		this.map.dispose();
 		this.backgroundMusic.dispose();
-		this.mapRenderer.dispose();
+		this.map.dispose();
 	}
 
 	private void exit()

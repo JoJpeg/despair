@@ -3,12 +3,20 @@ package de.lfstudios.game.core.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 
 import java.util.ArrayList;
 
+/**
+ * @author vwiebe
+ */
 public class Player
 {
+	private BodyDef bodyDef;
+	private Body body;
+
 	private TextureRegion currentFrame;
 	private ArrayList<Action> actionList;
 	private Action standAction;
@@ -26,6 +34,10 @@ public class Player
 
 	public Player()
 	{
+
+		this.bodyDef = new BodyDef();
+		this.bodyDef.type = BodyDef.BodyType.DynamicBody;
+
 		this.standAction = new Action("game/player_run_0.png",
 									  8,
 									  4,
@@ -133,7 +145,7 @@ public class Player
 
 		// default
 		this.currentAction = this.standAction;
-		this.speed = 4.0f;
+		this.speed = 2.0f;
 		this.setBlockReleased(true);
 		this.setStateTime(0.0f);
 	}
@@ -146,7 +158,7 @@ public class Player
 	private void setDirection(float x, float y)
 	{
 		Vector2 v = new Vector2(x, y);
-		float angle = v.angle(new Vector2(0,1));
+		float angle = v.angle(new Vector2(0, 1));
 
 		if( angle == 0)
 		{
@@ -212,9 +224,7 @@ public class Player
 	}
 
 	public void stand() { this.setCurrentAction(this.standAction); }
-
 	public void walk() { this.setCurrentAction(this.walkAction); }
-
 	public void run() { this.setCurrentAction(this.attackAction); }
 
 	/**
@@ -223,12 +233,11 @@ public class Player
 	 */
 	public void update(Touchpad touchpad)
 	{
-
 		if(this.getCurrentAction().equals(this.blockAction))
 		{
 			if(!this.isBlockReleased())
 			{
-				// hold block
+				this.getBody().setLinearVelocity(0, 0);
 			}
 			else if(this.getCurrentAction().getCurrentAnimation().isAnimationFinished(this.getStateTime()))
 			{
@@ -239,7 +248,7 @@ public class Player
 		{
 			if(this.getCurrentAction().equals(this.attackAction))
 			{
-				this.speed = 1.5f;
+				this.speed = 1.0f;
 
 				if(this.getCurrentAction()
 					   .getCurrentAnimation()
@@ -250,15 +259,20 @@ public class Player
 			}
 			else
 			{
-				this.speed = 4.0f;
+				this.speed = 2.0f;
+
 				this.setDirection(touchpad.getKnobPercentX(),
 								  touchpad.getKnobPercentY());
 			}
 
 			if(Gdx.input.isTouched())
 			{
-				this.setPosX(this.getPosX() + touchpad.getKnobPercentX() * this.speed);
-				this.setPosY(this.getPosY() + touchpad.getKnobPercentY() * this.speed);
+				this.getBody().setLinearVelocity(touchpad.getKnobPercentX() * this.speed,
+												 touchpad.getKnobPercentY() * this.speed);
+			}
+			else
+			{
+				this.getBody().setLinearVelocity(0, 0);
 			}
 		}
 
@@ -370,6 +384,33 @@ public class Player
 	public Action getCurrentAction()
 	{
 		return this.currentAction;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public BodyDef getBodyDef()
+	{
+		return this.bodyDef;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public Body getBody()
+	{
+		return this.body;
+	}
+
+	/**
+	 *
+	 * @param body
+	 */
+	public void setBody(Body body)
+	{
+		this.body = body;
 	}
 
 	/**

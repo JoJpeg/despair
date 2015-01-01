@@ -4,6 +4,9 @@ import de.lfstudios.game.Despair;
 import de.lfstudios.game.model.GameModel;
 import de.lfstudios.game.view.GameScreen;
 
+/**
+ * @author vwiebe
+ */
 public class GameController
 {
 	private Despair game;

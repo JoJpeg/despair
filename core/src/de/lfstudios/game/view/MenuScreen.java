@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.lfstudios.game.Despair;
 
+/**
+ * @author vwiebe
+ */
 public class MenuScreen implements Screen
 {
 
