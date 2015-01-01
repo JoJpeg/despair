@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,6 +34,7 @@ public class GameScreen implements Screen
 	private Music backButtonSound;
 	private Map map;
 	private Player player;
+
 	private ImageButton attackButton;
 	private Skin attackButtonSkin;
 	private ImageButton.ImageButtonStyle attackButtonStyle;
@@ -46,14 +45,6 @@ public class GameScreen implements Screen
 	private ImageButton.ImageButtonStyle blockButtonStyle;
 	private Drawable blockButtonDrawable;
 	private Drawable blockButtonActiveDrawable;
-
-
-
-
-	private BodyDef groundDef;
-	private Body groundBody;
-
-
 
 	public GameScreen(Despair game)
 	{
@@ -161,15 +152,6 @@ public class GameScreen implements Screen
 		this.updateTouchpad();
 		this.updateButtons();
 		this.updateCamera();
-		
-		//draw
-		this.spriteBatch.begin();
-		this.spriteBatch.draw(this.player.getCurrentFrame(),
-							  this.player.getPosX(),
-							  this.player.getPosY(),
-							  this.player.getCurrentFrame().getRegionWidth() * 4,
-							  this.player.getCurrentFrame().getRegionHeight() * 4);
-		this.spriteBatch.end();
 
 		this.stage.draw();
 
@@ -231,10 +213,9 @@ public class GameScreen implements Screen
 	private void updatePlayer()
 	{
 		this.player.update(this.touchpad);
-
 		this.player.setPosX(this.player.getBody().getPosition().x * this.map.getBoxToWorld());
 		this.player.setPosY(this.player.getBody().getPosition().y * this.map.getBoxToWorld());
-
+		this.player.draw(this.spriteBatch);
 	}
 
 	private void clearScreen()

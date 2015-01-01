@@ -1,6 +1,7 @@
 package de.lfstudios.game.core.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -283,6 +284,21 @@ public class Player
 								 .getKeyFrame(this.getStateTime(),
 											  this.getCurrentAction()
 												  .isAnimationLooping()));
+	}
+
+	/**
+	 *
+	 * @param spriteBatch
+	 */
+	public void draw(SpriteBatch spriteBatch)
+	{
+		spriteBatch.begin();
+		spriteBatch.draw(this.getCurrentFrame(),
+							  this.getPosX(),
+							  this.getPosY(),
+							  this.getCurrentFrame().getRegionWidth() * 4,
+							  this.getCurrentFrame().getRegionHeight() * 4);
+		spriteBatch.end();
 	}
 
 	public void dispose()
