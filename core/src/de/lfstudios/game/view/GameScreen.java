@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.lfstudios.game.Despair;
-import de.lfstudios.game.core.player.Map;
+import de.lfstudios.game.core.map.Map;
 import de.lfstudios.game.core.player.Player;
 
 public class GameScreen implements Screen
@@ -73,7 +73,7 @@ public class GameScreen implements Screen
 
 		this.map = new Map();
 		this.player = new Player();
-		this.player.setPosition(777 * this.map.getMapScale(), 3920 * this.map.getMapScale());
+		this.player.setPosition(777 * this.map.getMapScale(), 3820 * this.map.getMapScale());
 
 		this.map.add(this.player);
 

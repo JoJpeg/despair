@@ -1,12 +1,16 @@
-package de.lfstudios.game.core.player;
+package de.lfstudios.game.core.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import de.lfstudios.game.core.player.Player;
 
 /**
  * @author vwiebe
@@ -34,7 +38,13 @@ public class Map
 	public Map()
 	{
 		this.world = new World(new Vector2(0, 0), true);
-		this.debugRenderer = new Box2DDebugRenderer();
+
+		this.debugRenderer = new Box2DDebugRenderer(false,  // drawBodies
+													false,  // drawJoints
+													false,  // drawAABBs
+													false,  // drawInactiveBodies
+													false,  // drawVelocities
+													false); // drawContacts
 		this.setupMap();
 	}
 
@@ -55,6 +65,9 @@ public class Map
 							  this.tiledMap.getProperties()
 										   .get("tileheight", Integer.class) *
 							  this.MAP_SCALE;
+
+		this.setupCollision(this.MAP_COLLISION_DARK);
+		this.setupCollision(this.MAP_HOLE_DARK);
 	}
 
 	/**
@@ -92,13 +105,51 @@ public class Map
 		playerShape.setPosition(new Vector2(0.65f, 0.1f));
 		player.getBody().createFixture(playerShape, 0f);
 
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = playerShape;
-		fixtureDef.density = 0.5f;
-		fixtureDef.friction = 0.4f;
-		fixtureDef.restitution = 0.6f;
+//		FixtureDef fixtureDef = new FixtureDef();
+//		fixtureDef.shape = playerShape;
+//		fixtureDef.density = 0.5f;
+//		fixtureDef.friction = 0.4f;
+//		fixtureDef.restitution = 0.6f;
 
 		playerShape.dispose();
+	}
+
+	/**
+	 *
+	 * @param layerName
+	 */
+	private void setupCollision(String layerName)
+	{
+		MapLayer layer = this.tiledMap.getLayers().get(layerName);
+
+		for(MapObject object : layer.getObjects())
+		{
+			if(object instanceof PolylineMapObject)
+			{
+				BodyDef groundDef;
+				Body groundBody;
+
+				groundDef = new BodyDef();
+				groundDef.type = BodyDef.BodyType.StaticBody;
+
+				groundDef.position.set(((PolylineMapObject) object).getPolyline().getX() * this.getWorldToBox() * this.getMapScale(),
+									   ((PolylineMapObject) object).getPolyline().getY() * this.getWorldToBox() * this.getMapScale());
+
+				groundBody = world.createBody(groundDef);
+
+				float[] vertices = ((PolylineMapObject) object).getPolyline().getVertices();
+
+				for(int j  = 0; j < vertices.length; j++)
+				{
+					vertices[j] = vertices[j] * this.getWorldToBox() * this.getMapScale();
+				}
+
+				ChainShape chain = new ChainShape();
+				chain.createChain(vertices);
+				groundBody.createFixture(chain, 0f);
+				chain.dispose();
+			}
+		}
 	}
 
 	/**
