@@ -83,6 +83,7 @@ public class Map
 		this.setupCollision(this.MAP_HOLE_LIGHT);
 		this.setupCollision("objects_light");
 		this.setupCollision("grass_light");
+		this.setupCollision("stream_light");
 
 		this.setupLayerObjects(this.objectSet);
 	}
