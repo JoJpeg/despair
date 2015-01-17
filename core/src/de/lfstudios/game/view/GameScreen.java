@@ -125,14 +125,12 @@ public class GameScreen implements Screen
 		{
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 			{
-				map.getTiledMap().getLayers().get(map.getMapLight()).setVisible(true);
 				player.block();
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
 			{
-				map.getTiledMap().getLayers().get(map.getMapLight()).setVisible(false);
 				player.setBlockReleased(true);
 			}
 		});
@@ -165,8 +163,9 @@ public class GameScreen implements Screen
 	{
 		this.map.getMapRenderer().setView(this.camera);
 		this.map.getMapRenderer().render();
-
 		this.map.updatePhysics(this.camera);
+
+		this.map.draw(this.spriteBatch, this.player);
 	}
 
 	private void updateCamera()

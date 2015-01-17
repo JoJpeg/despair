@@ -39,7 +39,7 @@ public class Player
 		this.bodyDef = new BodyDef();
 		this.bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-		this.standAction = new Action("game/player_run_0.png",
+		this.standAction = new Action("game/player_run_light.png",
 									  8,
 									  4,
 									  0.5f,
@@ -56,7 +56,7 @@ public class Player
 										  },
 									  true);
 
-		this.walkAction = new Action("game/player_run_0.png",
+		this.walkAction = new Action("game/player_run_light.png",
 									 8,
 									 4,
 									 0.25f,
@@ -76,7 +76,7 @@ public class Player
 									 0.05f,
 									 true);
 
-		this.runAction = new Action("game/player_run_0.png",
+		this.runAction = new Action("game/player_run_light.png",
 									8,
 									4,
 									0.15f,
