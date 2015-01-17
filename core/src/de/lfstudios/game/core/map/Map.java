@@ -2,7 +2,6 @@ package de.lfstudios.game.core.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -12,10 +11,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import de.lfstudios.game.core.player.Player;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author vwiebe
@@ -44,19 +40,17 @@ public class Map
 	private HashSet<MapObject> visibleObjectSet = new HashSet<MapObject>();
 	private Vector2 lastPlayerPos;
 
-	private ArrayList<TextureRegion> mapObjectTextureRegions = new ArrayList<TextureRegion>();
-
 
 	public Map()
 	{
 		this.world = new World(new Vector2(0, 0), true);
 
-		this.debugRenderer = new Box2DDebugRenderer(true,  // drawBodies
-													true,  // drawJoints
-													true,  // drawAABBs
-													true,  // drawInactiveBodies
-													true,  // drawVelocities
-													true); // drawContacts
+		this.debugRenderer = new Box2DDebugRenderer(false,  // drawBodies
+													false,  // drawJoints
+													false,  // drawAABBs
+													false,  // drawInactiveBodies
+													false,  // drawVelocities
+													false); // drawContacts
 		this.setupMap();
 	}
 
@@ -84,8 +78,6 @@ public class Map
 		this.setupCollision("objects_light");
 		this.setupCollision("grass_light");
 		this.setupCollision("stream_light");
-
-		this.setupLayerObjects(this.objectSet);
 	}
 
 	/**
@@ -131,25 +123,6 @@ public class Map
 //		fixtureDef.restitution = 0.6f;
 
 		playerShape.dispose();
-	}
-
-	/**
-	 *
-	 * @param objectSet
-	 */
-	private void setupLayerObjects(Set<MapObject> objectSet)
-	{
-//		TiledMapTileSets tiledMapTileSets = this.tiledMap.getTileSets();
-//
-//		for(TiledMapTileSet tiledMapTileSet : tiledMapTileSets)
-//		{
-//			for(TiledMapTile tiledMapTile : tiledMapTileSet)
-//			{
-//				if(objectSet.)
-//			}
-//		}
-
-
 	}
 
 	/**
@@ -243,7 +216,8 @@ public class Map
 		{
 			lastPlayerPos = playerVector;
 
-			System.out.println("Recalculating visible objects...");
+			System.out.print("Recalculating visible objects...");
+			int x = 0;
 			for(MapObject object : this.objectSet)
 			{
 				Vector2 objectVector = new Vector2(
@@ -253,15 +227,18 @@ public class Map
 
 				);
 
-				if(objectVector.dst(playerVector) < 800)
+				if(objectVector.dst(playerVector) < 1400)
 				{
 					this.visibleObjectSet.add(object);
+					x++;
 				}
 				else
 				{
 					this.visibleObjectSet.remove(object);
 				}
 			}
+			System.out.println(" " + x);
+			x = 0;
 		}
 
 		spriteBatch.begin();
