@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import de.lfstudios.game.core.player.Player;
 
@@ -44,7 +43,7 @@ public class Map
 
 	private HashSet<MapObject> objectSet = new HashSet<MapObject>();
 	private ArrayList<MapObject> visibleObjectSet = new ArrayList<MapObject>();
-	private Vector2 lastPlayerPos;
+	private Vector2 lastCameraPos;
 
 
 	public Map()
@@ -210,46 +209,17 @@ public class Map
 	 */
 	public void draw(SpriteBatch spriteBatch, Player player, Vector2 cameraPosition)
 	{
-		if(this.lastPlayerPos == null)
+		if(this.lastCameraPos == null)
 		{
-			this.lastPlayerPos = cameraPosition;
+			this.lastCameraPos = cameraPosition;
+			calculateVisibleObjects(cameraPosition);
 		}
 
-		if(lastPlayerPos.dst(cameraPosition) > 200)
+		if(lastCameraPos.dst(cameraPosition) > 200)
 		{
-			lastPlayerPos = cameraPosition;
+			lastCameraPos = cameraPosition;
 
-			System.out.print("Recalculating visible objects...");
-			for (MapObject object : this.objectSet)
-			{
-				Vector2 objectVector = new Vector2(
-
-					((((Float.parseFloat(object.getProperties().get("x").toString())) * this.getMapScale()) +
-					  ((((tiledMap.getTileSets()
-								  .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
-								  .getTextureRegion()
-								  .getRegionWidth()) * this.getMapScale())) / 2))),
-					((((Float.parseFloat(object.getProperties().get("y").toString())) * this.getMapScale()) +
-					  ((((tiledMap.getTileSets()
-								  .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
-								  .getTextureRegion()
-								  .getRegionHeight()) * this.getMapScale())) / 2)))
-
-				);
-
-				if (objectVector.dst(cameraPosition) < 1400)
-				{
-					if (!this.visibleObjectSet.contains(object))
-					{
-						this.visibleObjectSet.add(object);
-					}
-				}
-				else
-				{
-					this.visibleObjectSet.remove(object);
-				}
-			}
-			System.out.println(this.visibleObjectSet.size());
+			this.calculateVisibleObjects(cameraPosition);
 
 			Collections.sort(this.visibleObjectSet, new Comparator<MapObject>()
 			{
@@ -300,6 +270,40 @@ public class Map
 
 			spriteBatch.end();
 		}
+	}
+
+	/**
+	 *
+	 * @param cameraPosition
+	 */
+	private void calculateVisibleObjects(Vector2 cameraPosition)
+	{
+		System.out.print("Recalculating visible objects...");
+		for (MapObject object : this.objectSet)
+		{
+			float objX = Float.parseFloat(object.getProperties().get("x").toString()) * this.getMapScale();
+			float objY = Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale();
+			float objWidth = (tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties().get("gid").toString())).getTextureRegion().getRegionWidth()) * this.getMapScale();
+			float objHeight = (tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties().get("gid").toString())).getTextureRegion().getRegionHeight()) * this.getMapScale();
+
+			float left = cameraPosition.x - (Gdx.graphics.getWidth() / 2);
+			float top = cameraPosition.y + (Gdx.graphics.getHeight() / 2);
+			float right = cameraPosition.x + (Gdx.graphics.getWidth() / 2);
+			float bottom = cameraPosition.y - (Gdx.graphics.getHeight() / 2);
+
+			if(((objX + objWidth) > left && objX < right) && (objY < top && (objY + objHeight) > bottom))
+			{
+				if (!this.visibleObjectSet.contains(object))
+				{
+					this.visibleObjectSet.add(object);
+				}
+			}
+			else
+			{
+				this.visibleObjectSet.remove(object);
+			}
+		}
+		System.out.println(this.visibleObjectSet.size());
 	}
 
 	/**
