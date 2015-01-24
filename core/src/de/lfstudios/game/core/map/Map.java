@@ -1,5 +1,6 @@
 package de.lfstudios.game.core.map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,8 +10,13 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import de.lfstudios.game.core.player.Player;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 /**
@@ -37,7 +43,7 @@ public class Map
 	private static final String MAP_HOLE_LIGHT = "hole_light";
 
 	private HashSet<MapObject> objectSet = new HashSet<MapObject>();
-	private HashSet<MapObject> visibleObjectSet = new HashSet<MapObject>();
+	private ArrayList<MapObject> visibleObjectSet = new ArrayList<MapObject>();
 	private Vector2 lastPlayerPos;
 
 
@@ -202,65 +208,98 @@ public class Map
 	 *
 	 * @param spriteBatch
 	 */
-	public void draw(SpriteBatch spriteBatch, Player player)
+	public void draw(SpriteBatch spriteBatch, Player player, Vector2 cameraPosition)
 	{
-		Vector2 playerVector = new Vector2(player.getPosX(), player.getPosY());
-
-
 		if(this.lastPlayerPos == null)
 		{
-			this.lastPlayerPos = playerVector;
+			this.lastPlayerPos = cameraPosition;
 		}
 
-		if(lastPlayerPos.dst(playerVector) > 200)
+		if(lastPlayerPos.dst(cameraPosition) > 200)
 		{
-			lastPlayerPos = playerVector;
+			lastPlayerPos = cameraPosition;
 
 			System.out.print("Recalculating visible objects...");
-			int x = 0;
-			for(MapObject object : this.objectSet)
+			for (MapObject object : this.objectSet)
 			{
 				Vector2 objectVector = new Vector2(
 
-					((((Float.parseFloat(object.getProperties().get("x").toString())) * this.getMapScale()) + ((((tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties().get("gid").toString())).getTextureRegion().getRegionWidth()) * this.getMapScale())) / 2))),
-					((((Float.parseFloat(object.getProperties().get("y").toString())) * this.getMapScale()) + ((((tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties().get("gid").toString())).getTextureRegion().getRegionHeight()) * this.getMapScale())) / 2)))
+					((((Float.parseFloat(object.getProperties().get("x").toString())) * this.getMapScale()) +
+					  ((((tiledMap.getTileSets()
+								  .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
+								  .getTextureRegion()
+								  .getRegionWidth()) * this.getMapScale())) / 2))),
+					((((Float.parseFloat(object.getProperties().get("y").toString())) * this.getMapScale()) +
+					  ((((tiledMap.getTileSets()
+								  .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
+								  .getTextureRegion()
+								  .getRegionHeight()) * this.getMapScale())) / 2)))
 
 				);
 
-				if(objectVector.dst(playerVector) < 1400)
+				if (objectVector.dst(cameraPosition) < 1400)
 				{
-					this.visibleObjectSet.add(object);
-					x++;
+					if (!this.visibleObjectSet.contains(object))
+					{
+						this.visibleObjectSet.add(object);
+					}
 				}
 				else
 				{
 					this.visibleObjectSet.remove(object);
 				}
 			}
-			System.out.println(" " + x);
-			x = 0;
+			System.out.println(this.visibleObjectSet.size());
+
+			Collections.sort(this.visibleObjectSet, new Comparator<MapObject>()
+			{
+				@Override
+				public int compare(MapObject o1, MapObject o2)
+				{
+					if (Float.parseFloat(o1.getProperties().get("y").toString()) < Float.parseFloat(o2.getProperties().get("y").toString
+						()))
+					{
+						return 1;
+					}
+					else if (Float.parseFloat(o1.getProperties().get("y").toString()) >
+							 Float.parseFloat(o2.getProperties().get("y").toString()))
+					{
+						return -1;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+			});
 		}
 
-		spriteBatch.begin();
+		boolean playerDrawn = false;
 		for(MapObject object : this.visibleObjectSet)
 		{
-				spriteBatch.draw(tiledMap.getTileSets()
-										 .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
-										 .getTextureRegion(),
-								 Float.parseFloat(object.getProperties().get("x").toString()) * this.getMapScale(),
-								 Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale(),
-								 tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties()
-																					   .get("gid")
-																					   .toString())).getTextureRegion().getRegionWidth() *
-								 this.getMapScale(),
-								 tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties()
-																					   .get("gid")
-																					   .toString())).getTextureRegion().getRegionHeight() *
-								 this.getMapScale());
+			if(Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale() < player.getPosY() && !playerDrawn)
+			{
+				player.draw(spriteBatch);
+				playerDrawn = true;
+			}
 
+			spriteBatch.begin();
+			spriteBatch.draw(tiledMap.getTileSets()
+									 .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
+									 .getTextureRegion(),
+							 Float.parseFloat(object.getProperties().get("x").toString()) * this.getMapScale(),
+							 Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale(),
+							 tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties()
+																				   .get("gid")
+																				   .toString())).getTextureRegion().getRegionWidth() *
+							 this.getMapScale(),
+							 tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties()
+																				   .get("gid")
+																				   .toString())).getTextureRegion().getRegionHeight() *
+							 this.getMapScale());
 
+			spriteBatch.end();
 		}
-		spriteBatch.end();
 	}
 
 	/**

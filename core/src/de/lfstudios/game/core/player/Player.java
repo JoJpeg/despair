@@ -370,7 +370,7 @@ public class Player
 	 *
 	 * @param posX
 	 */
-	public void setPosX(float posX)
+	private void setPosX(float posX)
 	{
 		this.posX = posX;
 	}
@@ -388,7 +388,7 @@ public class Player
 	 *
 	 * @param posY
 	 */
-	public void setPosY(float posY)
+	private void setPosY(float posY)
 	{
 		this.posY = posY;
 	}

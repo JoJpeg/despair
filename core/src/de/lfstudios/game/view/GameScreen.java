@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -53,7 +54,7 @@ public class GameScreen implements Screen
 		this.camera.position.set(0, 0, 0);
 		this.camera.update();
 
-		this.backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/ingame.mp3"));
+		this.backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/ingame_light.mp3"));
 		this.backButtonSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/gong.mp3"));
 		this.backgroundMusic.play();
 
@@ -145,8 +146,8 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		this.clearScreen();
-		this.updateMap();
 		this.updatePlayer();
+		this.updateMap();
 		this.updateTouchpad();
 		this.updateButtons();
 		this.updateCamera();
@@ -165,7 +166,15 @@ public class GameScreen implements Screen
 		this.map.getMapRenderer().render();
 		this.map.updatePhysics(this.camera);
 
-		this.map.draw(this.spriteBatch, this.player);
+		this.map.draw(this.spriteBatch, this.player, new Vector2(this.camera.position.x, this.camera.position.y));
+	}
+
+	private void updatePlayer()
+	{
+		this.player.update(this.touchpad);
+		this.player.setPosition(this.player.getBody().getPosition().x * this.map.getBoxToWorld(),
+								this.player.getBody().getPosition().y * this.map.getBoxToWorld());
+//		this.player.draw(this.spriteBatch);
 	}
 
 	private void updateCamera()
@@ -207,14 +216,6 @@ public class GameScreen implements Screen
 								this.camera.position.y - ((Gdx.graphics.getHeight()) - this.touchpad.getHeight()),
 								this.touchpad.getWidth(),
 								this.touchpad.getHeight());
-	}
-
-	private void updatePlayer()
-	{
-		this.player.update(this.touchpad);
-		this.player.setPosX(this.player.getBody().getPosition().x * this.map.getBoxToWorld());
-		this.player.setPosY(this.player.getBody().getPosition().y * this.map.getBoxToWorld());
-		this.player.draw(this.spriteBatch);
 	}
 
 	private void clearScreen()
