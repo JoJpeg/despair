@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx;
 import de.lfstudios.game.controller.GameController;
 import de.lfstudios.game.controller.MenuController;
 
+/**
+ * @author vwiebe
+ */
 public class Despair extends Game
 {
 

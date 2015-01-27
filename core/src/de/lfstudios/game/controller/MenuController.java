@@ -4,6 +4,9 @@ import de.lfstudios.game.Despair;
 import de.lfstudios.game.model.MenuModel;
 import de.lfstudios.game.view.MenuScreen;
 
+/**
+ * @author vwiebe
+ */
 public class MenuController
 {
 	private Despair game;

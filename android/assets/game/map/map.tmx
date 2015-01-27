@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="map1" tilewidth="64" tileheight="64">
+  <image source="map-1.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="257" name="map2" tilewidth="64" tileheight="64">
+  <image source="map-2.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="513" name="grass" tilewidth="64" tileheight="64">
+  <image source="grass.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="514" name="Tree" tilewidth="128" tileheight="181">
+  <image source="tree_.png" width="256" height="181"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="800"/>
+    <frame tileid="1" duration="900"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="500"/>
+    <frame tileid="0" duration="700"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="516" name="light_unique" tilewidth="64" tileheight="64">
+  <image source="map-l_1.png" width="4096" height="4096"/>
+ </tileset>
+ <tileset firstgid="4612" name="giant" tilewidth="303" tileheight="298">
+  <image source="giant.png" width="1214" height="302"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="700"/>
+    <frame tileid="1" duration="700"/>
+    <frame tileid="2" duration="700"/>
+    <frame tileid="3" duration="700"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4616" name="wheet" tilewidth="32" tileheight="32">
+  <image source="wheet.png" width="64" height="64"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="500"/>
+    <frame tileid="1" duration="700"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="600"/>
+    <frame tileid="0" duration="800"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="2" duration="600"/>
+    <frame tileid="0" duration="800"/>
+   </animation>
+  </tile>
+  <tile id="3">
+   <animation>
+    <frame tileid="3" duration="900"/>
+    <frame tileid="1" duration="500"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4620" name="Grass" tilewidth="32" tileheight="32">
+  <image source="high_grass.png" width="64" height="64"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="600"/>
+    <frame tileid="1" duration="900"/>
+    <frame tileid="3" duration="700"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="500"/>
+    <frame tileid="3" duration="800"/>
+    <frame tileid="2" duration="900"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="3" duration="700"/>
+    <frame tileid="1" duration="800"/>
+    <frame tileid="0" duration="600"/>
+   </animation>
+  </tile>
+  <tile id="3">
+   <animation>
+    <frame tileid="3" duration="800"/>
+    <frame tileid="1" duration="900"/>
+    <frame tileid="0" duration="700"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4624" name="static_objects" tilewidth="75" tileheight="125">
+  <tile id="0">
+   <image width="10" height="18" source="ahre.png"/>
+  </tile>
+  <tile id="1">
+   <image width="21" height="21" source="lumberjack.png"/>
+  </tile>
+  <tile id="2">
+   <image width="63" height="46" source="wagon.png"/>
+  </tile>
+  <tile id="3">
+   <image width="41" height="45" source="logg.png"/>
+  </tile>
+  <tile id="4">
+   <image width="75" height="125" source="house_0.png"/>
+  </tile>
+  <tile id="5">
+   <image width="8" height="12" source="flower_0.png"/>
+  </tile>
+  <tile id="6">
+   <image width="8" height="13" source="flower_1.png"/>
+  </tile>
+  <tile id="7">
+   <image width="3" height="12" source="pillar.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="4632" name="stream_0" tilewidth="230" tileheight="418">
+  <image source="stream_0.png" width="460" height="418"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="300"/>
+    <frame tileid="1" duration="300"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4634" name="stream_1" tilewidth="1052" tileheight="183">
+  <image source="stream_1.png" width="1052" height="366"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="1" duration="300"/>
+    <frame tileid="0" duration="300"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4636" name="wheet2" tilewidth="256" tileheight="32">
+  <image source="wheet_2.png" width="256" height="64"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="900"/>
+    <frame tileid="1" duration="500"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="800"/>
+    <frame tileid="0" duration="1200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4638" name="wheet3" tilewidth="128" tileheight="32">
+  <image source="wheet_2.png" width="256" height="64"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="900"/>
+    <frame tileid="2" duration="700"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="700"/>
+    <frame tileid="3" duration="800"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="0" duration="600"/>
+    <frame tileid="2" duration="700"/>
+   </animation>
+  </tile>
+  <tile id="3">
+   <animation>
+    <frame tileid="1" duration="900"/>
+    <frame tileid="3" duration="600"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="4642" name="pond" tilewidth="266" tileheight="131">
+  <image source="pond.png" width="266" height="262"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="900"/>
+    <frame tileid="1" duration="900"/>
+   </animation>
+  </tile>
+ </tileset>
+ <layer name="dark" width="64" height="64" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztz/cXDnQYxmFkz0L2KqJklD0jklUqhBCyd2XPyCqFCpUVIrOMkJkRslf2JnvvPbvef6Lezvl+zrl+fM557pgxYsSIxRPEJg5xiUd8EpCQRCQmCUlJxpPEjOmeJ4hNHOISj/gkICGJSEwSkpKMJ/mve4rkpCAlT5OK1KQhLelITwYykonMZInc25CcFKTkaVKRmjSkJR3pyUBGMpGZLFGw/xmeJSvZeI7s5OB5XiAnL5KL3OQhLy9F7m14lqxk4zmyk4PneYGcvEgucpOHvLwUBftfJh/5KUBBClGYIhSlGMUpQUleoRSlI/c25CM/BShIIQpThKIUozglKMkrlKJ0FOx/lTKU5TXK8TrlqUBFKlGZN3iTKrzF25F7G8pQltcox+uUpwIVqURl3uBNqvAWb0fB/neoSjWq8y41qEkt3qM2dajL+9SjPg0i9zZUpRrVeZca1KQW71GbOtTlfepRnwZRsP8DGtKIxjShKc1oTgta0orWtKEtH/JR5N6GhjSiMU1oSjOa04KWtKI1bWjLh3wUBfs/ph3t6UBHOtGZLnSlG93pQU8+oRe9I/c2tKM9HehIJzrTha50ozs96Mkn9KJ3FOz/lD70pR/9GcBnfM5AvuBLBjGYIXzF15F7G/rQl370ZwCf8TkD+YIvGcRghvAVX0fB/m8YyjCG8y3f8T0jGMkoRjOGHxjLOMZH7m0YyjCG8y3f8T0jGMkoRjOGHxjLOMZHwf4fmcBEfmISk5nCVKYxnZ/5hRnMZBazI/c2TGAiPzGJyUxhKtOYzs/8wgxmMovZUbD/V+Ywl3n8xnwWsJBFLGYJv7OUZSxnReTehjnMZR6/MZ8FLGQRi1nC7yxlGctZEQX7/2Alq1jNn6xhLetYzwY2sonNbGEr2yL3NqxkFav5kzWsZR3r2cBGNrGZLWxlWxTs/4vt7GAnu9jNHvayj/0c4CCHOMwRjkbubdjODnayi93sYS/72M8BDnKIwxzhaBTs/5tjHOcEJznFac5wlnOc5wIXucRlrkTubTjGcU5wklOc5gxnOcd5LnCRS1zmShTsv8o1rnODm9ziNne4yz3u84CHPOJx5Nj/V7nGdW5wk1vc5g53ucd9HvCQRzyObI/1r88NhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKPQ/7B83WgAS
+  </data>
+ </layer>
+ <objectgroup name="collision_dark" visible="0">
+  <object x="102.5" y="92.25">
+   <polyline points="-1.66667,1.66667 -17.25,8.33333 -13.5417,16.0833 -14.5833,22.4583 -8.25,24.5833 -10,31 -0.291667,35.4583 6.625,37.0833 0.125,44.7917 14.125,42.0417 25.5,42.0417 21.25,50.25 29.7083,47.8333 38.1667,43.5417 50.2083,44.5833 53.625,52.9167 59.8333,46.9167 67.25,37.375 75.5417,40.8333 86,40.875 90.375,31.75 93.875,25.875 98.875,24 104.125,19 98.5,9.375 114.292,-1.16667 137,2.54167 137.125,14.625 140,19.125 134,23.375 126.417,23.7083 125.5,28 127.625,31.125 125.5,32.25 121.125,34.875 113.375,34.875 114.75,38.875 111.875,42.25 112.25,48 108,52.5 108,59.0417 114.125,60.875 119.75,65.8333 127.125,60.25 138.125,47.125 143.125,43.375 141.625,37.625 160.125,36.25 168.125,47 171.875,49.625 182,55 182.75,59.125 191.5,60 190.75,64.5 201.125,64.875 202.625,70.125 212.125,71.125 217.75,76.75 236.625,80.375 230.125,75.25 231.75,71.375 225.625,63.375 221.25,55.125 210.375,51.125 207.25,45.625 196,42 195.125,35.125 191.25,32.625 193.708,29.0417 190.375,29.25 186,26 186.75,23.5 183.625,22.375 177.125,18.875 175.75,14 170.875,10.75 166.875,7.375 168.125,2.25 173.75,-6.5 180.375,-12.125 182,-16.375 181.375,-19.5 189.125,-22.5417 181.25,-22 176.25,-17.125 173,-12.375 168.125,-6.625 160.625,1.83333 149.5,-9.29167 101.417,-19.9583 46.125,-13.5 2.25,-1.125"/>
+  </object>
+  <object x="198.333" y="267">
+   <polyline points="0,0 6.66667,3.66667 14.3333,3.33333 25,0.333333 27.3333,-6 25,-9.33333 17,-11 8.33333,-10.3333 0,-6.33333 0,-1"/>
+  </object>
+  <object x="187.333" y="357">
+   <polyline points="0,0 5.66667,2.66667 16.3333,4.33333 24.6667,0.666667 27.6667,-5.66667 21.6667,-10 10,-10.6667 1,-8 -1,-3"/>
+  </object>
+  <object x="58.6667" y="279.667">
+   <polyline points="0,0 10,0.333333 16,-4.66667 14.3333,-14.3333 6.33333,-16.6667 -5.66667,-15.3333 -13,-12 -9.66667,-5 -0.666667,-0.333333"/>
+  </object>
+  <object x="63" y="184.667">
+   <polyline points="0,0 11.6667,0 17.6667,-3.66667 19,-11.3333 10.3333,-13.6667 -2.66667,-14.3333 -10,-11.3333 -8.33333,-5.33333 -0.333333,-0.333333"/>
+  </object>
+  <object x="171" y="238">
+   <polyline points="0,0 6.66667,-5 10.6667,-16 14,-21.3333 15.3333,-29 25,-28.3333 31.6667,-32.3333 33.6667,-38.6667 39.6667,-43.6667 38.6667,-54.6667 38.3333,-61 38.3333,-67.3333 28.3333,-64.3333 17,-64 9,-52 0.666667,-55 -5.33333,-46 -10,-41 -22,-41 -29.3333,-40 -30.6667,-45 -37.6667,-47.6667 -44.3333,-45 -47.6667,-40.3333 -42,-37 -34.6667,-31.6667 -37,-28.3333 -45,-24 -56.6667,-14.3333 -61.3333,-6 -65.3333,-7.66667 -73.6667,1.66667 -81.3333,8.33333 -79.6667,15 -73,13.6667 -64.6667,13.3333 -57.6667,19.3333 -46.6667,22 -39.6667,17.6667 -32,20.6667 -22.3333,20.6667 -15,16.3333 -7.66667,22.6667 1,18.6667 3,10.6667 1,4 -0.666667,0"/>
+  </object>
+  <object x="549.667" y="169.333">
+   <polyline points="0,0 7,4.66667 17.6667,5 25.6667,0.666667 26.3333,-7.33333 21.3333,-10 8.66667,-9.66667 0.333333,-6.33333 -0.333333,-1"/>
+  </object>
+  <object x="636.333" y="107.667">
+   <polyline points="0,0 4.66667,4 15.3333,7 27.3333,5.66667 30.3333,1.66667 28.3333,-5 21.3333,-7.66667 10.6667,-7.66667 0.666667,-4.66667 -0.666667,-0.333333"/>
+  </object>
+  <object x="631" y="103.333">
+   <polyline points="0,0 -14.6667,5.33333 -38,12.3333 -59.3333,13 -71.3333,14.6667 -85.3333,8.66667 -97.6667,-3 -109.333,-12 -113,-24.6667 -115.333,-30.3333 -123,-34.6667 -125.333,-42 -81.6667,-61.3333 -48.6667,-64.3333 -14.3333,-62.6667 6,-56.3333 23,-34.6667 23.6667,-22 17.3333,-14 7.66667,-5.66667 0.666667,-0.666667"/>
+  </object>
+  <object x="768" y="137.667">
+   <polyline points="0,0 -8.33333,3.33333 -13,0.666667 -4.33333,-2.66667 -0.333333,-0.666667"/>
+  </object>
+  <object x="770.667" y="124.667">
+   <polyline points="0,0 35.3333,27.6667 46,21.6667 48,13 44.3333,2.66667 41.6667,-8 58.3333,-14.3333 68.3333,-20 71.6667,-21.6667 68.6667,-34.3333 -3.66667,-4.33333 0.333333,0"/>
+  </object>
+  <object x="868.667" y="144">
+   <polyline points="0,0 14.6667,1.66667 32.6667,0.333333 41,7.66667 49.6667,20.6667 50,30.6667 51.3333,39 56.3333,47.3333 57.6667,57 64,65.3333 66.6667,73.3333 72.3333,76.6667 75.6667,80 67.6667,91 76.3333,84.3333 84.6667,77 87,64 83.3333,54.3333 86.6667,48.6667 77.6667,44 74,39 76.6667,34 69,26 72.3333,18 66.3333,12.6667 66,3.66667 60.6667,0.333333 63,-3.33333 61,-10.3333 57.6667,-14 54,-18.3333 46.6667,-17.6667 41.6667,-23 37.6667,-23.3333 31.6667,-25 28.3333,-21.3333 21.3333,-25.3333 16,-18.3333 12.3333,-13.3333 6.66667,-8.66667 3.66667,-1 0.333333,-0.333333"/>
+  </object>
+  <object x="973.333" y="152">
+   <polyline points="0,0 5,4 42.6667,-1.33333 50,13.3333 49.6667,25.6667 31.3333,40.3333 36.6667,45 52.6667,38 68.6667,20.6667 46.6667,-5.33333 0,-0.666667"/>
+  </object>
+  <object x="655.667" y="304">
+   <polyline points="0,0 3.33333,8.33333 -2.66667,14.6667 -10.3333,20.6667 -19,16.3333 -28,15 -38.3333,11.3333 -44.6667,5 -41,-4.66667 -34,-8.33333 -26.6667,-9.33333 -16.6667,-7 -8.33333,-5 0.333333,0.666667"/>
+  </object>
+  <object x="613" y="281.667">
+   <polyline points="1.5,-1 -10,0 -17.3333,-3.66667 -28,-12 -41,-19.3333 -46,-23.6667 -29,-29 -19.3333,-20 1.16667,-8.08333"/>
+  </object>
+  <object x="729.333" y="233.667">
+   <polyline points="-7.25,0.25 -7.83333,5.25 -6.66667,12.5 1.16667,24.0833 -8.58333,21.75 -29,17 -44.6667,9.66667 -42.3333,2.33333 -21.6667,-1 -0.0833333,-4 -7.16667,-0.25"/>
+  </object>
+  <object x="736.333" y="224.667">
+   <polyline points="-17.75,-2.5 6.66667,-1.33333 16.6667,-2 25.6667,-1.66667 20.3333,4 9,7 0.333333,6 -14.8333,5.08333"/>
+  </object>
+  <object x="315" y="74">
+   <polyline points="0,0 40,24 66,11 87,20 100,36 121,46 135,54 128,44 108,32 102,18 73,-2 47,2 13,-6 -5,-13 -1,-3"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="hole_dark" visible="0">
+  <object x="495" y="229">
+   <polyline points="0,0 -11.6667,3.66667 -24,9 -22.3333,17 -6.66667,19 -5.66667,22.3333 -11,25 -12.6667,33.3333 -11.6667,37.6667 -18.3333,41.3333 -24.3333,41.6667 -28.6667,48.3333 -28.3333,56.3333 -18.6667,60.6667 -16,64.3333 -28.3333,77.6667 -34,85.6667 -41.3333,93.3333 -46.6667,96.3333 -35.6667,94 -31.6667,95.3333 -23,96.3333 -2,93.3333 4.66667,83.3333 17.3333,77.3333 16.6667,70 31,63 45.6667,51.3333 55,36.3333 58.6667,30.6667 71,29.3333 88.6667,22.3333 107.667,36.6667 122.667,55 128,59 158.333,69 169.667,70.3333 174.667,73 180.667,71.3333 186.667,74 205.667,86.6667 210.667,92 227.667,97.3333 230.667,102.333 241.333,101.333 274.333,109 321.333,97.3333 328.667,93.6667 331.667,83 317,73.3333 293.667,59 277.333,48.3333 262.667,38.6667 247,32 228.333,27 194,24 188.667,18 219.333,1.33333 227.667,0.333333 222.667,-9.33333 208.333,-22.3333 195.667,-22.6667 187.333,-22.3333 179.333,-31.6667 157.333,-38.6667 140,-49 129.667,-54 107.667,-56 95,-50.6667 84,-42.6667 75.6667,-44.3333 68.6667,-45 62,-39 55.3333,-33.6667 49,-32 45.3333,-32 43.3333,-28.6667 29,-21 33,-18.6667 37.3333,-10.6667 32.3333,-4 24.6667,-3 10,-1 0.333333,0.333333"/>
+  </object>
+  <object x="268.667" y="427.667">
+   <polyline points="0,0 19.6667,1 40.6667,-14 46.6667,-20 68.6667,-28.3333 78.3333,-27 85.6667,-33.3333 80.6667,-38 65,-44.3333 55.6667,-43.6667 51,-47.3333 29,-47.3333 13.6667,-51 5,-50.3333 -2.33333,-40.3333 2.33333,-32 -1,-25.6667 -3.33333,-17 -9.66667,-17 -23.3333,-11.6667 -22.3333,-3 -9.66667,2.33333 -0.666667,0.666667"/>
+  </object>
+  <object x="202.333" y="110.667">
+   <polyline points="0,0 -3.33333,-5.33333 2.66667,-16 12.6667,-22.6667 26,-25 37,-23 43,-14.6667 44.3333,-3.66667 39,4.33333 27.3333,6 16.6667,7 6,5 0.666667,0"/>
+  </object>
+  <object x="47" y="323.333">
+   <polyline points="0,0 5,-8.66667 5,-19.6667 -5.66667,-43.6667 -17.3333,-57.6667 -14,-79.6667 -11.3333,-97.6667 -4.33333,-111.667 -11,-119 -16.6667,-125.667 -18.6667,-139.333 -15,-147.667 -19.6667,-158.333 -20.3333,-178.333 -17,-182.333 -19,-188.333 -20,-196 -12,-196.667 -20.6667,-210.333 -23.6667,-220.667 -20.3333,-228 -6,-225 -0.333333,-227.667 -2,-234.667 5,-234.333 16.6667,-235.333 26,-232 33.6667,-229.667 43.3333,-230 51.3333,-233.333 92,-254 137,-267 174,-263 200,-256.333 210.667,-256.333 217,-253.667 234.333,-260.333 244.333,-258.667 256.333,-252.333 267,-247.333 275.333,-253 279.667,-265.333 285,-273.667 329.667,-275.333 353,-279 367.333,-277.333 396.333,-269.333 429.667,-264 454.333,-262.667 584,-273.333 609.667,-265.667 630.333,-257.333 643,-247.667 647.667,-240.333 649.333,-229 655.333,-226.333 664,-215 683.333,-215.333 694.333,-204.333 712.333,-198.333 718.667,-199 804.667,-224 802.333,-219.667 820,-209.333 838.333,-222 859,-225 870.667,-223 893.333,-224.667 906,-219 917,-208.333 923.333,-199.333 931.667,-183.333 976.667,-178.667 995.333,-155 994,-147.333 982.667,-137.667 985.333,-131.333 966,-126 962,-121.333 968,-113.333 961,-104 949.667,-92.3333 938,-79.3333 924,-70.3333 909.333,-71.6667 901.333,-51.3333 889,-43 880.667,-35.6667 880,-22 887.333,-7.33333 897.667,6 903.333,18.3333 925.667,25.3333 951.333,33.6667 957.333,40.6667 965,67.3333 965.667,74 957,86 950.667,92 938,85 920.333,88.6667 911.333,99 903.667,106.667 862.333,104 810,109.333 762.667,113.333 716.333,112.333 694,121.667 676.667,122.333 659.667,127 653.333,136.333 655,152.667 685.333,187.667 684.333,193 655.333,192.667 617.667,189.333 604,194 571.333,193.667 533.333,205.667 494.667,210 464.667,216.333 419,211.667 354.667,208.333 285.333,207.333 243,200.667 203.667,202 184.333,198.333 179.333,194 176.667,186.667 169.333,185 164.667,189 164,201.667 152.667,208 132.333,214 115.333,213.667 95.6667,205.333 93.3333,210 83,207.667 42,201.667 16.6667,198 3.33333,192 4,185.667 5.66667,173.667 -7,155 -8.66667,134 -23.3333,99 -33.3333,87 -34,76 -23.3333,73.6667 -26,66 -15,44.6667 -15,30 -28.3333,10 -23.3333,3.66667 -17.6667,1.33333 -0.666667,0"/>
+  </object>
+ </objectgroup>
+ <layer name="light" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6B2/kVXxh5I6CVVVVVVVVVVVVVVVVVVVVVVXw/aADAB
+  </data>
+ </layer>
+ <layer name="light_uniq" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <objectgroup name="hole_light" visible="0"/>
+ <objectgroup name="stream_light" visible="0">
+  <object gid="4634" x="0" y="601"/>
+  <object gid="4632" x="935" y="418"/>
+  <object gid="4642" x="574" y="339"/>
+ </objectgroup>
+ <objectgroup name="grass_light" visible="0">
+  <object gid="4623" x="196.182" y="347.636"/>
+  <object gid="4623" x="207.091" y="351.636"/>
+  <object gid="4621" x="194.242" y="366.667"/>
+  <object gid="4620" x="373.273" y="323.091"/>
+  <object gid="4622" x="360.841" y="328.75"/>
+  <object gid="4620" x="969.636" y="358.909"/>
+  <object gid="4623" x="962.364" y="354"/>
+  <object gid="4620" x="984.364" y="366.364"/>
+  <object gid="4622" x="954.909" y="356.909"/>
+  <object gid="4622" x="792" y="156.364"/>
+  <object gid="4620" x="798" y="160.727"/>
+  <object gid="4620" x="650" y="308"/>
+  <object gid="4620" x="701.091" y="330.727"/>
+  <object gid="4621" x="712" y="336.182"/>
+  <object gid="4621" x="607.636" y="292.227"/>
+  <object gid="4622" x="559.636" y="264.364"/>
+  <object gid="4622" x="810.727" y="332.364"/>
+  <object gid="4620" x="737.273" y="342.182"/>
+  <object gid="4622" x="666.545" y="124.364"/>
+  <object gid="4621" x="673.636" y="119.818"/>
+  <object gid="4621" x="549.091" y="206"/>
+  <object gid="4621" x="275.455" y="476"/>
+  <object gid="4621" x="388.25" y="325"/>
+  <object gid="4636" x="223" y="388"/>
+  <object gid="4636" x="218.667" y="398.333"/>
+  <object gid="4636" x="217" y="407.667"/>
+  <object gid="4636" x="219.667" y="414.667"/>
+  <object gid="4636" x="225.667" y="418.667"/>
+  <object gid="4636" x="238" y="437.667"/>
+  <object gid="4636" x="253.667" y="447.667"/>
+  <object gid="4636" x="269.333" y="458.667"/>
+  <object gid="4636" x="229" y="428"/>
+  <object gid="4636" x="220.667" y="378.667"/>
+  <object gid="4636" x="283.333" y="471"/>
+  <object gid="4636" x="283" y="463.667"/>
+  <object gid="4620" x="503.667" y="479.667"/>
+  <object gid="4620" x="158" y="470.333"/>
+  <object gid="4620" x="169.667" y="485.667"/>
+  <object gid="4620" x="155.333" y="483"/>
+  <object gid="4620" x="69.3333" y="454.333"/>
+  <object gid="4620" x="81" y="457.333"/>
+  <object gid="4620" x="74.6667" y="460.333"/>
+  <object gid="4620" x="90.6667" y="454"/>
+  <object gid="4620" x="62.6667" y="461.667"/>
+  <object gid="4620" x="102.667" y="456.333"/>
+  <object gid="4620" x="184.333" y="575.667"/>
+  <object gid="4620" x="192.333" y="573"/>
+  <object gid="4620" x="197.667" y="578"/>
+  <object gid="4620" x="172.333" y="582.333"/>
+  <object gid="4623" x="205.667" y="577"/>
+  <object gid="4623" x="786.333" y="472.333"/>
+  <object gid="4623" x="773.667" y="474.667"/>
+  <object gid="4622" x="799.667" y="468.333"/>
+  <object gid="4622" x="793.333" y="472.667"/>
+  <object gid="4622" x="771.667" y="484"/>
+  <object gid="4622" x="986.333" y="297.667"/>
+  <object gid="4622" x="1006.67" y="284.667"/>
+  <object gid="4620" x="993" y="291"/>
+  <object gid="4620" x="978.333" y="304"/>
+  <object gid="4620" x="967.667" y="306.667"/>
+  <object gid="4623" x="996.667" y="295.667"/>
+  <object gid="4623" x="1016" y="289.333"/>
+  <object gid="4623" x="1025.33" y="283"/>
+  <object gid="4623" x="939.667" y="350"/>
+  <object gid="4623" x="1124.67" y="238"/>
+  <object gid="4623" x="1108.67" y="246.333"/>
+  <object gid="4623" x="665" y="208.667"/>
+  <object gid="4623" x="711" y="258.333"/>
+  <object gid="4623" x="702" y="253"/>
+  <object gid="4623" x="709.667" y="246"/>
+  <object gid="4623" x="681" y="232.333"/>
+  <object gid="4623" x="692.667" y="230.667"/>
+  <object gid="4623" x="678" y="227"/>
+  <object gid="4623" x="697" y="249.667"/>
+  <object gid="4623" x="678.667" y="313.667"/>
+  <object gid="4623" x="665" y="303"/>
+  <object gid="4623" x="569.667" y="267"/>
+  <object gid="4623" x="578.333" y="274.667"/>
+  <object gid="4622" x="585.333" y="279.333"/>
+  <object gid="4622" x="981.667" y="194.667"/>
+  <object gid="4623" x="990.333" y="197.333"/>
+  <object gid="4623" x="1019.33" y="187"/>
+  <object gid="4623" x="982" y="265"/>
+  <object gid="4623" x="993.667" y="259.333"/>
+  <object gid="4623" x="962" y="269.333"/>
+  <object gid="4623" x="939.667" y="270.333"/>
+  <object gid="4623" x="928.333" y="274.333"/>
+  <object gid="4623" x="920" y="320.667"/>
+  <object gid="4620" x="1034.67" y="279.333"/>
+  <object gid="4620" x="818.667" y="324"/>
+  <object gid="4620" x="376.333" y="284.333"/>
+  <object gid="4620" x="365" y="278.667"/>
+  <object gid="4621" x="384" y="289.667"/>
+  <object gid="4621" x="492" y="267.333"/>
+  <object gid="4621" x="588.333" y="207"/>
+  <object gid="4622" x="581.667" y="212.333"/>
+  <object gid="4622" x="626" y="163.667"/>
+  <object gid="4623" x="587.333" y="152"/>
+  <object gid="4641" x="319.667" y="476"/>
+  <object gid="4641" x="397" y="478"/>
+  <object gid="4641" x="337" y="483"/>
+  <object gid="4641" x="374" y="489"/>
+  <object gid="4640" x="303.333" y="370"/>
+  <object gid="4640" x="330" y="362.667"/>
+  <object gid="4640" x="384" y="389"/>
+  <object gid="4640" x="426.667" y="452.667"/>
+  <object gid="4616" x="475.333" y="394.333"/>
+  <object gid="4616" x="467.667" y="400.333"/>
+  <object gid="4616" x="462.333" y="408.333"/>
+  <object gid="4616" x="459" y="420"/>
+  <object gid="4616" x="462" y="429.667"/>
+  <object gid="4617" x="454" y="410.667"/>
+  <object gid="4617" x="451.333" y="401"/>
+  <object gid="4617" x="458.333" y="395.667"/>
+  <object gid="4617" x="458" y="377.667"/>
+  <object gid="4617" x="453" y="368"/>
+  <object gid="4617" x="445.333" y="361.333"/>
+  <object gid="4617" x="434.333" y="350.667"/>
+  <object gid="4617" x="421.333" y="349.667"/>
+  <object gid="4617" x="409" y="349.333"/>
+  <object gid="4617" x="394.333" y="350.333"/>
+  <object gid="4617" x="406.667" y="355.667"/>
+  <object gid="4618" x="384.333" y="354.667"/>
+  <object gid="4618" x="426.667" y="369"/>
+  <object gid="4618" x="380" y="493"/>
+  <object gid="4619" x="388.333" y="494.667"/>
+  <object gid="4616" x="399" y="497"/>
+  <object gid="4618" x="411" y="492.667"/>
+  <object gid="4618" x="352" y="486"/>
+  <object gid="4618" x="248" y="445"/>
+  <object gid="4618" x="223" y="424"/>
+  <object gid="4618" x="525.333" y="448.333"/>
+  <object gid="4618" x="423.333" y="493.333"/>
+  <object gid="4618" x="435" y="492.333"/>
+  <object gid="4619" x="481" y="482"/>
+  <object gid="4619" x="317.667" y="479.333"/>
+  <object gid="4616" x="265" y="454.333"/>
+  <object gid="4616" x="217" y="389.333"/>
+  <object gid="4618" x="215.333" y="399.667"/>
+  <object gid="4617" x="216" y="412.333"/>
+  <object gid="4618" x="427.333" y="346"/>
+  <object gid="4619" x="404.333" y="343.667"/>
+  <object gid="4617" x="448.333" y="492.667"/>
+  <object gid="4618" x="517.667" y="457.333"/>
+  <object gid="4619" x="495.667" y="386.667"/>
+  <object gid="4619" x="516.667" y="465"/>
+  <object gid="4619" x="470.667" y="383.667"/>
+  <object gid="4629" x="420.667" y="498.333"/>
+  <object gid="4629" x="307.333" y="476.333"/>
+  <object gid="4630" x="436" y="500"/>
+  <object gid="4630" x="232.667" y="429.667"/>
+  <object gid="4630" x="663.667" y="303.333"/>
+  <object gid="4630" x="1007.33" y="197.667"/>
+  <object gid="4629" x="1000.67" y="258.333"/>
+  <object gid="4629" x="1010.67" y="249.667"/>
+  <object gid="4630" x="1008.67" y="260.667"/>
+  <object gid="4630" x="988.333" y="262.667"/>
+  <object gid="4630" x="981.667" y="268.667"/>
+  <object gid="4630" x="816" y="155"/>
+ </objectgroup>
+ <objectgroup name="objects_light">
+  <object gid="515" x="-6" y="140.667"/>
+  <object gid="515" x="131.333" y="163.333"/>
+  <object gid="515" x="47.0676" y="215.342" rotation="4.51961"/>
+  <object gid="515" x="101.609" y="365.908" rotation="-0.945853"/>
+  <object gid="514" x="132.8" y="258.954" rotation="0.338374"/>
+  <object gid="514" x="17.2955" y="343.232" rotation="-10.9157"/>
+  <object gid="514" x="-46" y="288.667"/>
+  <object gid="514" x="197.846" y="211.695" rotation="-2.80969"/>
+  <object gid="514" x="185" y="338.083"/>
+  <object gid="514" x="-34" y="431.667"/>
+  <object gid="514" x="246" y="166"/>
+  <object gid="514" x="88.6667" y="98"/>
+  <object gid="514" x="-23.3333" y="206"/>
+  <object gid="514" x="1036" y="212"/>
+  <object name="_giant" gid="4612" x="265" y="295"/>
+  <object gid="514" x="-49" y="581"/>
+  <object gid="514" x="28" y="463.5"/>
+  <object gid="4626" x="566.5" y="408.5"/>
+  <object gid="4624" x="546.228" y="396.5"/>
+  <object gid="4624" x="513.182" y="427.364"/>
+  <object gid="4624" x="524.485" y="403.151"/>
+  <object gid="4624" x="565.333" y="439"/>
+  <object gid="4624" x="540.333" y="424.333"/>
+  <object gid="4624" x="496.969" y="412.924"/>
+  <object gid="4625" x="608.5" y="192"/>
+  <object gid="4627" x="603.091" y="167.818"/>
+  <object gid="4628" x="972" y="195"/>
+  <object gid="4631" x="685" y="259"/>
+  <object gid="514" x="495" y="186.5"/>
+  <object gid="514" x="796.5" y="528"/>
+  <object gid="514" x="68" y="534.5"/>
+  <object gid="514" x="638" y="171"/>
+  <object gid="514" x="593" y="112.5"/>
+ </objectgroup>
+ <objectgroup name="collision_light">
+  <object x="584.5" y="219">
+   <polyline points="0,0 -7.5,5.25 -12.25,14.5 -8.25,23.25 -4.25,38.25 10.25,50.5 23.75,58.75 35,67.5 44,69.75 56.75,65 64,69.75 67.25,77.5 75,79.25 82.5,81.75 91.5,88.75 105.5,99.75 118,99.25 131.75,100.75 140,108.25 153.5,112 156.25,115.5 162.25,113.75 178.5,117.75 187.75,119.5 191.25,115.5 207,118.5 209.5,112.75 225,111.75 231.75,112.75 228.5,109.5 232.5,107 238,108.25 234.5,103.5 239.75,102.5 254.75,101.5 258.5,97.25 255.5,91.75 241.5,85 224.75,83.75 212,77.75 204.25,72 194.75,67.5 188.5,60 186.5,57.5 179.75,56.5 168.75,46.5 152,45.25 140.5,40 128.25,33 121.5,29 99.5,40.5 80,29.5 109,17.25 106,9.25 102.25,5.25 108.25,8 107,2.75 105,-3.5 104,-8.75 87.5,-14.75 67,-8.75 48.5,-6.5 32.5,-5.25 18.25,-7.5 -0.25,0"/>
+  </object>
+  <object x="192.5" y="363.5">
+   <polyline points="0,0 19.75,-7.75 18.25,-17.75 -7.75,-28 -19.75,-10.75 -11.25,-2.25 -0.75,-0.25"/>
+  </object>
+  <object x="58" y="189.5">
+   <polyline points="135.5,37 172.5,78.5 189.5,91 237.5,104.5 283.5,114 316,112.5 367,110 390,105 411.5,101.5 434.5,91.5 460,79 466.5,72.5 481.5,56.5 487,40.5 484.5,21 506.5,2.5 512.5,-16.5 528,-23.5 545.5,-45.5 573,-60 622,-77 659,-76 688.5,-75.5 708.5,-65.5 708.5,-56.5 717.5,-49 725,-51 746,-36 799.5,-60 807,-76.5 812,-86.5 835,-93 883,-96.5 919,-75.5 955,-55 914.5,-43.5 940,5.5 955,3 957.5,6 948,11.5 951,15.5 947,26 923.5,46 903,72.5 905,79.5 876.5,91 870,98.5 871,119.5 884.5,132.5 887.5,143.5 927,163 944,167 952.5,190.5 954.5,202 942,223.5 921,217.5 893.5,235.5 866,236 837.5,244.5 805,243 794,251 783.5,244.5 714,244.5 692,252 661,252.5 640,271.5 647.5,298 673.5,321.5 659.5,326.5 618,323 547,328.5 505,340 465,345 456,350.5 435,347 382.5,345.5 367,341.5 293.5,343 223,336 192.5,330.5 132.5,342.5 111.5,351 39.5,337 4,335 -9,322 -10.5,304 -25.5,275.5 -56.5,270 -57,-43 -53.5,-92 52.5,-78 93,-59 118.5,-15.5 136.5,35.5"/>
+  </object>
+  <object x="604.5" y="145">
+   <polyline points="0,0 21,18.5 37,12 14,-10.5 0,-2.5"/>
+  </object>
+  <object x="887.273" y="145.091">
+   <polyline points="0,0 -23.8182,11.4545 -54.9091,23.8182 -68.1818,57.0909 -32.7273,83.8182 5.81818,95.4545 47.2727,78 48.7273,66 37.0909,51.4545 30.3636,41.0909 29.2727,28.7273 26.1818,12 22.3636,-0.909091 0.181818,-0.363636"/>
+  </object>
+  <object x="886.727" y="145.091">
+   <polyline points="0,0 -22,2.18182 -7.45455,-12.7273 -3.63636,-23.0909 25.8182,-25.4545 38.9091,-18.7273 37.8182,-13.4545 50.9091,-9.27273 44,1.63636 47.0909,18 52.9091,26 53.0909,34.3636 65.6364,46.3636 66.9091,62.3636 67.2727,75.8182 58.1818,86.3636 51.0909,93.0909 44.1818,97.6364 56.3636,82.1818 55.2727,69.8182 48.9091,65.8182"/>
+  </object>
+  <object x="226" y="314">
+   <polyline points="0,0 17.5,-6 15,-17.5 -1,-16 -11.5,-8 0,0"/>
+  </object>
+  <object x="163.5" y="324.5">
+   <polyline points="0,0 -1,12 -13,15.5 -26.5,11.5 -21,-4.5 -0.5,-0.5"/>
+  </object>
+  <object x="165" y="229">
+   <polyline points="0,0 15,4.5 21.5,-5 17.5,-15.5 -5,-14 1,-1.5"/>
+  </object>
+  <object x="112" y="191.5">
+   <polyline points="0,0 -17.5,5.5 -27,-5 -24.5,-15 -1.5,-11.5 0,-1"/>
+  </object>
+  <object x="98.5" y="499">
+   <properties>
+    <property name="parent" value=""/>
+   </properties>
+   <polyline points="0,0 7.5,12.5 33,8.5 31,-6 14.5,-11 0,-1.5"/>
+  </object>
+  <object x="79" y="440">
+   <polyline points="0,0 16.5,-11.5 2.5,-20.5 -21,-14.5 -1,0.5"/>
+  </object>
+  <object x="31" y="405">
+   <polyline points="0,0 -21.5,9.5 -29.5,3.5 -30.5,-14.5 -2.5,-14 0.5,0"/>
+  </object>
+  <object x="12.5" y="543">
+   <polyline points="0,0 2,9.5 -4,-9 -12.5,-8 -11.5,15.5 1.5,8.5"/>
+  </object>
+  <object x="69" y="317.5">
+   <polyline points="0,0 -14,11 -33.5,3.5 -31.5,-13 -6,-11 0,-1"/>
+  </object>
+  <object x="19.5" y="249.5">
+   <polyline points="0,0 -3.5,9 -18.5,12.5 -18,-14.5 -1.5,-2"/>
+  </object>
+  <object x="669" y="137.5">
+   <polyline points="0,0 8.5,11 31,5 33,-4.5 19,-11 -0.5,-0.5"/>
+  </object>
+  <object x="610.5" y="188.5">
+   <polyline points="0,0 7.5,2.5 16,-0.5 9,-6.5 0,-5.5 -1.5,-1.5"/>
+  </object>
+  <object x="567.5" y="392.5">
+   <polyline points="0,0 22,12.5 34,11.5 49,17 60.5,12 42.5,4.5 47,-2 19,-14.5 0,0"/>
+  </object>
+  <object x="828" y="487">
+   <polyline points="0,0 -0.5,9 8.5,15.5 32.5,12 29,-1.5 0.5,-0.5"/>
+  </object>
+ </objectgroup>
+</map>

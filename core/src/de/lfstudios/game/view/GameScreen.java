@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.tiled.*;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,7 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.lfstudios.game.Despair;
-import de.lfstudios.game.core.Player;
+import de.lfstudios.game.core.map.Map;
+import de.lfstudios.game.core.player.Player;
 
 public class GameScreen implements Screen
 {
@@ -40,20 +41,19 @@ public class GameScreen implements Screen
 	private Stage stage;
 	private Music backgroundMusic;
 	private Music backButtonSound;
-	private TiledMap map;
-	private TiledMapTileSet tileSet;
-	private OrthogonalTiledMapRenderer mapRenderer;
+	private Map map;
 	private Player player;
 
 	private ImageButton attackButton;
 	private Skin attackButtonSkin;
 	private ImageButton.ImageButtonStyle attackButtonStyle;
 	private Drawable attackButtonDrawable;
-
+	private Drawable attackButtonActiveDrawable;
 	private ImageButton blockButton;
 	private Skin blockButtonSkin;
 	private ImageButton.ImageButtonStyle blockButtonStyle;
 	private Drawable blockButtonDrawable;
+	private Drawable blockButtonActiveDrawable;
 
 	public GameScreen(Despair game)
 	{
@@ -65,7 +65,7 @@ public class GameScreen implements Screen
 		this.camera.position.set(0, 0, 0);
 		this.camera.update();
 
-		this.backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/ingame.mp3"));
+		this.backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/ingame_light.mp3"));
 		this.backButtonSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/gong.mp3"));
 		this.backgroundMusic.play();
 
@@ -75,10 +75,11 @@ public class GameScreen implements Screen
 		this.stage = new Stage(new ScreenViewport(this.camera), this.spriteBatch);
 		this.uiStage = new Stage(new ExtendViewport(UI_HEIGHT * aspectRatio , UI_HEIGHT));
 
-		this.setupMap();
-
+		this.map = new Map();
 		this.player = new Player();
-		this.player.setPosition(192 * 5, 416 * 5);
+		this.player.setPosition(777 * this.map.getMapScale(), 3820 * this.map.getMapScale());
+
+		this.map.add(this.player);
 
 		this.touchpadSkin = new Skin();
 		this.touchpadSkin.add("knob", new Texture(Gdx.files.internal("game/knob.png")));
@@ -92,98 +93,119 @@ public class GameScreen implements Screen
 				UI_CONTROL_AREA_SIZE);
 
 		this.attackButtonSkin = new Skin();
-		this.attackButtonSkin.add("icon", new Texture(Gdx.files.internal("game/button_atk.png")));
+		this.attackButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_atk.png")));
+		this.attackButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_atk_a.png")));
 		this.attackButtonStyle = new ImageButton.ImageButtonStyle();
-		this.attackButtonDrawable = this.attackButtonSkin.getDrawable("icon");
+		this.attackButtonDrawable = this.attackButtonSkin.getDrawable("inactive");
+		this.attackButtonActiveDrawable = this.attackButtonSkin.getDrawable("active");
 		this.attackButtonStyle.imageUp = this.attackButtonDrawable;
+		this.attackButtonStyle.imageDown = this.attackButtonActiveDrawable;
 		this.attackButton = new ImageButton(this.attackButtonStyle);
 		this.attackButton.setBounds(UI_HEIGHT * aspectRatio - UI_CONTROL_AREA_SIZE / 2 - this.attackButton.getWidth() * 2f - UI_VIEW_BORDER,
 				UI_CONTROL_AREA_SIZE / 2 + UI_VIEW_BORDER - this.touchKnob.getMinWidth() / 2,
 				this.attackButton.getHeight(),
 				this.attackButton.getWidth());
 
+		this.attackButton.addListener( new InputListener()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				player.attack();
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
+			{
+
+			}
+		});
+
 		this.blockButtonSkin = new Skin();
-		this.blockButtonSkin.add("icon", new Texture(Gdx.files.internal("game/button_def.png")));
+		this.blockButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_def.png")));
+		this.blockButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_def_a.png")));
 		this.blockButtonStyle = new ImageButton.ImageButtonStyle();
-		this.blockButtonDrawable = this.blockButtonSkin.getDrawable("icon");
+		this.blockButtonDrawable = this.blockButtonSkin.getDrawable("inactive");
+		this.blockButtonActiveDrawable = this.blockButtonSkin.getDrawable("active");
 		this.blockButtonStyle.imageUp = this.blockButtonDrawable;
+		this.blockButtonStyle.imageDown = this.blockButtonActiveDrawable;
 		this.blockButton = new ImageButton(this.blockButtonStyle);
 		this.blockButton.setBounds(UI_HEIGHT * aspectRatio - UI_CONTROL_AREA_SIZE / 2 - UI_VIEW_BORDER,
 				UI_CONTROL_AREA_SIZE / 2 + UI_VIEW_BORDER,
 				this.blockButton.getHeight(),
 				this.blockButton.getWidth());
 
+		this.blockButton.addListener( new InputListener()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				player.block();
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button)
+			{
+				player.setBlockReleased(true);
+			}
+		});
+		
 		this.uiStage.addActor(this.touchpad);
 		this.uiStage.addActor(this.attackButton);
 		this.uiStage.addActor(this.blockButton);
 		Gdx.input.setInputProcessor(this.uiStage);
 	}
 
-	private void setupMap()
-	{
-		this.map = new TmxMapLoader().load("game/map/scene1.tmx");
-		this.tileSet =  this.map.getTileSets().getTileSet("ground");
-		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, (float) Gdx.graphics.getHeight() / VIEW_HEIGHT );
-	}
-
 	@Override
 	public void render(float delta)
 	{
 		this.clearScreen();
-		this.updateMap();
 		this.updatePlayer();
+		this.updateMap();
 		this.updateCamera();
-
-		//draw
-		this.spriteBatch.begin();
-		this.spriteBatch.draw(this.player.getCurrentFrame(),
-							  this.player.getPosX(),
-							  this.player.getPosY(),
-							  this.player.getCurrentFrame().getRegionWidth() * (float) Gdx.graphics.getHeight() / VIEW_HEIGHT ,
-							  this.player.getCurrentFrame().getRegionHeight() * (float) Gdx.graphics.getHeight() / VIEW_HEIGHT );
-		this.spriteBatch.end();
 
 		this.stage.draw();
 		this.uiStage.draw();
 
-
-		if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK))
+		{
 			this.exit();
 		}
 	}
 
 	private void updateMap()
 	{
-		this.mapRenderer.setView(this.camera);
-		this.mapRenderer.render();
+		this.map.getMapRenderer().setView(this.camera);
+		this.map.getMapRenderer().render();
+		this.map.updatePhysics(this.camera);
 
+		this.map.draw(this.spriteBatch, this.player, new Vector2(this.camera.position.x, this.camera.position.y));
+	}
+
+	private void updatePlayer()
+	{
+		this.player.update(this.touchpad);
+		this.player.setPosition(this.player.getBody().getPosition().x * this.map.getBoxToWorld(),
+								this.player.getBody().getPosition().y * this.map.getBoxToWorld());
+//		this.player.draw(this.spriteBatch);
 	}
 
 	private void updateCamera()
 	{
 		this.camera
 			.position.set(this.player.getPosX() + (this.player.getCurrentFrame().getRegionWidth() / 2),
-				this.player.getPosY() + (this.player.getCurrentFrame().getRegionHeight() / 2),
-				0);
+						  this.player.getPosY() + (this.player.getCurrentFrame().getRegionHeight() / 2),
+						  0);
+
+		float camerax1 = this.camera.position.x - (this.camera.viewportWidth / 2);
+		float camerax2 = this.camera.position.x + (this.camera.viewportWidth / 2);
+		float cameray1 = this.camera.position.y - (this.camera.viewportHeight / 2);
+		float cameray2 = this.camera.position.y + (this.camera.viewportHeight / 2);
+
+		if(camerax1 < 0) this.camera.position.set(this.camera.viewportWidth / 2, this.camera.position.y, 0);
+		if(cameray1 < 0) this.camera.position.set(this.camera.position.x, this.camera.viewportHeight / 2, 0);
+		if(camerax2 > this.map.getMapPixelWidth()) this.camera.position.set(this.map.getMapPixelWidth() - (this.camera.viewportWidth / 2), this.camera.position.y, 0);
+		if(cameray2 > this.map.getMapPixelHeight()) this.camera.position.set(this.camera.position.x, this.map.getMapPixelHeight() - (this.camera.viewportHeight / 2), 0);
+
 		this.camera.update();
-	}
-
-	private void updatePlayer()
-	{
-		if(Gdx.input.isTouched())
-		{
-			this.player.setPosX(this.player.getPosX() + this.touchpad.getKnobPercentX() * 4);
-			this.player.setPosY(this.player.getPosY() + this.touchpad.getKnobPercentY() * 4);
-		}
-
-		this.player.setAnimationType(this.touchpad.getKnobPercentX(),
-									 this.touchpad.getKnobPercentY());
-
-		// prepare current player frame
-		this.player.setStateTime(this.player.getStateTime() + Gdx.graphics.getDeltaTime());
-		this.player.setCurrentFrame(this.player.getCurrentAnimation()
-											   .getKeyFrame(this.player.getStateTime(),
-															true));
 	}
 
 	private void clearScreen()
@@ -227,26 +249,26 @@ public class GameScreen implements Screen
 	public void dispose()
 	{
 		this.backgroundMusic.stop();
-
 		this.spriteBatch.dispose();
 		this.touchpadSkin.dispose();
 		this.stage.dispose();
 		this.player.dispose();
-		this.map.dispose();
 		this.backgroundMusic.dispose();
-		this.mapRenderer.dispose();
+		this.map.dispose();
 	}
 
 	private void exit()
 	{
 		this.backButtonSound.setVolume(0.1f);
-		this.backButtonSound.setOnCompletionListener(new Music.OnCompletionListener() {
+		this.backButtonSound.setOnCompletionListener(new Music.OnCompletionListener()
+		{
 			@Override
 			public void onCompletion(Music music)
 			{
-			backButtonSound.dispose();
+				backButtonSound.dispose();
 			}
 		});
+
 		this.backButtonSound.play();
 		this.dispose();
 		this.game.openMenu();
