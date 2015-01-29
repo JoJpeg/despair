@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.lfstudios.game.Despair;
 import de.lfstudios.game.core.map.Map;
@@ -23,6 +24,13 @@ import de.lfstudios.game.core.player.Player;
 
 public class GameScreen implements Screen
 {
+	private static final float UI_HEIGHT = 200;
+	private static final float UI_VIEW_BORDER = UI_HEIGHT / 40;
+	private static final float UI_CONTROL_AREA_SIZE = (UI_HEIGHT / 8) * 3;
+	private static final float VIEW_HEIGHT = 200;
+	private float aspectRatio;
+
+	private Stage uiStage;
 	private Despair game;
 	private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
@@ -50,7 +58,10 @@ public class GameScreen implements Screen
 	public GameScreen(Despair game)
 	{
 		this.game = game;
-		this.camera = new OrthographicCamera();
+
+		this.aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+
+		this.camera = new OrthographicCamera(aspectRatio , 1);
 		this.camera.position.set(0, 0, 0);
 		this.camera.update();
 
@@ -61,16 +72,8 @@ public class GameScreen implements Screen
 		this.spriteBatch = new SpriteBatch();
 		Gdx.input.setCatchBackKey(true);
 
-		this.touchpadSkin = new Skin();
-		this.touchpadSkin.add("knob", new Texture(Gdx.files.internal("game/knob.png")));
-		this.touchpadStyle = new Touchpad.TouchpadStyle();
-		this.touchKnob = this.touchpadSkin.getDrawable("knob");
-		this.touchKnob.setMinWidth(140);
-		this.touchKnob.setMinHeight(140);
-		this.touchpadStyle.knob = this.touchKnob;
-		this.touchpad = new Touchpad(10, this.touchpadStyle);
-		this.touchpad.setBounds(40, Gdx.graphics.getHeight() - 290, 350, 350);
 		this.stage = new Stage(new ScreenViewport(this.camera), this.spriteBatch);
+		this.uiStage = new Stage(new ExtendViewport(UI_HEIGHT * aspectRatio , UI_HEIGHT));
 
 		this.map = new Map();
 		this.player = new Player();
@@ -78,20 +81,30 @@ public class GameScreen implements Screen
 
 		this.map.add(this.player);
 
+		this.touchpadSkin = new Skin();
+		this.touchpadSkin.add("knob", new Texture(Gdx.files.internal("game/knob.png")));
+		this.touchpadStyle = new Touchpad.TouchpadStyle();
+		this.touchKnob = this.touchpadSkin.getDrawable("knob");
+		this.touchpadStyle.knob = this.touchKnob;
+		this.touchpad = new Touchpad(0, this.touchpadStyle);
+		this.touchpad.setBounds(UI_VIEW_BORDER,
+				UI_VIEW_BORDER,
+				UI_CONTROL_AREA_SIZE,
+				UI_CONTROL_AREA_SIZE);
+
 		this.attackButtonSkin = new Skin();
 		this.attackButtonSkin.add("inactive", new Texture(Gdx.files.internal("game/button_atk.png")));
 		this.attackButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_atk_a.png")));
 		this.attackButtonStyle = new ImageButton.ImageButtonStyle();
 		this.attackButtonDrawable = this.attackButtonSkin.getDrawable("inactive");
-		this.attackButtonDrawable.setMinWidth(70);
-		this.attackButtonDrawable.setMinHeight(70);
 		this.attackButtonActiveDrawable = this.attackButtonSkin.getDrawable("active");
-		this.attackButtonActiveDrawable.setMinWidth(70);
-		this.attackButtonActiveDrawable.setMinHeight(70);
 		this.attackButtonStyle.imageUp = this.attackButtonDrawable;
 		this.attackButtonStyle.imageDown = this.attackButtonActiveDrawable;
 		this.attackButton = new ImageButton(this.attackButtonStyle);
-		this.attackButton.setBounds(0, 0, 120, 120);
+		this.attackButton.setBounds(UI_HEIGHT * aspectRatio - UI_CONTROL_AREA_SIZE / 2 - this.attackButton.getWidth() * 2f - UI_VIEW_BORDER,
+				UI_CONTROL_AREA_SIZE / 2 + UI_VIEW_BORDER - this.touchKnob.getMinWidth() / 2,
+				this.attackButton.getHeight(),
+				this.attackButton.getWidth());
 
 		this.attackButton.addListener( new InputListener()
 		{
@@ -112,15 +125,14 @@ public class GameScreen implements Screen
 		this.blockButtonSkin.add("active", new Texture(Gdx.files.internal("game/button_def_a.png")));
 		this.blockButtonStyle = new ImageButton.ImageButtonStyle();
 		this.blockButtonDrawable = this.blockButtonSkin.getDrawable("inactive");
-		this.blockButtonDrawable.setMinWidth(70);
-		this.blockButtonDrawable.setMinHeight(70);
 		this.blockButtonActiveDrawable = this.blockButtonSkin.getDrawable("active");
-		this.blockButtonActiveDrawable.setMinWidth(70);
-		this.blockButtonActiveDrawable.setMinHeight(70);
 		this.blockButtonStyle.imageUp = this.blockButtonDrawable;
 		this.blockButtonStyle.imageDown = this.blockButtonActiveDrawable;
 		this.blockButton = new ImageButton(this.blockButtonStyle);
-		this.blockButton.setBounds(0, 0, 120, 120);
+		this.blockButton.setBounds(UI_HEIGHT * aspectRatio - UI_CONTROL_AREA_SIZE / 2 - UI_VIEW_BORDER,
+				UI_CONTROL_AREA_SIZE / 2 + UI_VIEW_BORDER,
+				this.blockButton.getHeight(),
+				this.blockButton.getWidth());
 
 		this.blockButton.addListener( new InputListener()
 		{
@@ -135,11 +147,11 @@ public class GameScreen implements Screen
 				player.setBlockReleased(true);
 			}
 		});
-
-		this.stage.addActor(this.touchpad);
-		this.stage.addActor(this.attackButton);
-		this.stage.addActor(this.blockButton);
-		Gdx.input.setInputProcessor(this.stage);
+		
+		this.uiStage.addActor(this.touchpad);
+		this.uiStage.addActor(this.attackButton);
+		this.uiStage.addActor(this.blockButton);
+		Gdx.input.setInputProcessor(this.uiStage);
 	}
 
 	@Override
@@ -148,11 +160,10 @@ public class GameScreen implements Screen
 		this.clearScreen();
 		this.updatePlayer();
 		this.updateMap();
-		this.updateTouchpad();
-		this.updateButtons();
 		this.updateCamera();
 
 		this.stage.draw();
+		this.uiStage.draw();
 
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK))
 		{
@@ -195,27 +206,6 @@ public class GameScreen implements Screen
 		if(cameray2 > this.map.getMapPixelHeight()) this.camera.position.set(this.camera.position.x, this.map.getMapPixelHeight() - (this.camera.viewportHeight / 2), 0);
 
 		this.camera.update();
-	}
-
-	private void updateButtons()
-	{
-		this.attackButton.setBounds(this.camera.position.x + (Gdx.graphics.getWidth() / 2 - this.attackButton.getWidth() * 1.5f),
-									this.camera.position.y - Gdx.graphics.getHeight() / 2 + this.attackButton.getHeight() / 2 + this.attackButton.getHeight() / 2,
-									this.attackButton.getWidth(),
-									this.attackButton.getHeight());
-
-		this.blockButton.setBounds(this.camera.position.x + (Gdx.graphics.getWidth() / 2 - this.blockButton.getWidth() * 2.5f),
-								   this.camera.position.y - Gdx.graphics.getHeight() / 2 + this.attackButton.getHeight() / 2,
-								   this.blockButton.getWidth(),
-								   this.blockButton.getHeight());
-	}
-
-	private void updateTouchpad()
-	{
-		this.touchpad.setBounds(this.camera.position.x - (Gdx.graphics.getWidth() / 2),
-								this.camera.position.y - ((Gdx.graphics.getHeight()) - this.touchpad.getHeight()),
-								this.touchpad.getWidth(),
-								this.touchpad.getHeight());
 	}
 
 	private void clearScreen()
