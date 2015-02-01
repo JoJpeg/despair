@@ -564,7 +564,7 @@
   <object gid="4623" x="1019.33" y="187"/>
   <object gid="4623" x="982" y="265"/>
   <object gid="4623" x="993.667" y="259.333"/>
-  <object gid="4623" x="962" y="269.333"/>
+  <object gid="4623" x="970" y="263.333"/>
   <object gid="4623" x="939.667" y="270.333"/>
   <object gid="4623" x="928.333" y="274.333"/>
   <object gid="4623" x="916.909" y="314.849"/>
@@ -688,7 +688,7 @@
    </properties>
   </object>
   <object name="_giant" gid="4612" x="265" y="295"/>
-  <object gid="4626" x="566.5" y="408.5"/>
+  <object gid="4626" x="567" y="409"/>
   <object gid="4624" x="546.228" y="396.5"/>
   <object gid="4624" x="513.182" y="427.364"/>
   <object gid="4624" x="524.485" y="403.151"/>
@@ -701,7 +701,7 @@
     <property name="originOffset" value="14"/>
    </properties>
   </object>
-  <object gid="4628" x="972" y="195">
+  <object gid="4628" x="972" y="198">
    <properties>
     <property name="originOffset" value="46"/>
    </properties>
@@ -712,7 +712,7 @@
     <property name="originOffset" value="37"/>
    </properties>
   </object>
-  <object gid="514" x="796.5" y="528">
+  <object gid="514" x="801" y="530">
    <properties>
     <property name="originOffset" value="37"/>
    </properties>
@@ -742,7 +742,7 @@
     <property name="originOffset" value="37"/>
    </properties>
   </object>
-  <object gid="4689" x="639.333" y="635.333">
+  <object gid="4689" x="648.378" y="637.833">
    <properties>
     <property name="originOffset" value="37"/>
    </properties>
@@ -851,7 +851,7 @@
   </object>
   <object gid="4633" x="79.5" y="501"/>
   <object gid="4633" x="59" y="512"/>
-  <object gid="4634" x="643" y="633.5">
+  <object gid="4634" x="653.364" y="638.591">
    <properties>
     <property name="originOffset" value="18"/>
    </properties>
