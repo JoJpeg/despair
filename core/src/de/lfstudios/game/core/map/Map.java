@@ -41,8 +41,13 @@ public class Map
 	private static final String MAP_HOLE_DARK = "hole_dark";
 	private static final String MAP_HOLE_LIGHT = "hole_light";
 
+//	private HashSet<MapObject>[][] chunkSet = new HashSet[32][32];
+
 	private HashSet<MapObject> objectSet = new HashSet<MapObject>();
+
+	private ArrayList<MapObject> backgroundObjectSet = new ArrayList<MapObject>();
 	private ArrayList<MapObject> visibleObjectSet = new ArrayList<MapObject>();
+
 	private Vector2 lastCameraPos;
 
 
@@ -83,6 +88,38 @@ public class Map
 		this.setupCollision("objects_light");
 		this.setupCollision("grass_light");
 		this.setupCollision("stream_light");
+
+//		this.generateChunks();
+	}
+
+//	private void generateChunks()
+//	{
+//		int i, j;
+//
+//		for(i = 0; i < 32; i++)
+//		{
+//			for(j = 0; j < 32; j++)
+//			{
+//				this.chunkSet[i][j] = new HashSet<MapObject>();
+//			}
+//		}
+//
+//		for(MapObject object : this.objectSet)
+//		{
+//			int chunkX = (int) (Float.parseFloat(object.getProperties().get("x").toString()) / 128);
+//			int chunkY = (int) (Float.parseFloat(object.getProperties().get("y").toString()) / 128);
+//
+//			this.chunkSet[chunkX][chunkY].add(object);
+//		}
+//	}
+
+	/**
+	 *
+	 * @param cameraPosition
+	 */
+	private HashSet<MapObject> getCurrentObjectSet(Vector2 cameraPosition)
+	{
+		return this.objectSet;
 	}
 
 	/**
@@ -218,39 +255,44 @@ public class Map
 		if(lastCameraPos.dst(cameraPosition) > 200)
 		{
 			lastCameraPos = cameraPosition;
-
 			this.calculateVisibleObjects(cameraPosition);
-
-			Collections.sort(this.visibleObjectSet, new Comparator<MapObject>()
-			{
-				@Override
-				public int compare(MapObject o1, MapObject o2)
-				{
-					if (Float.parseFloat(o1.getProperties().get("y").toString()) < Float.parseFloat(o2.getProperties().get("y").toString
-						()))
-					{
-						return 1;
-					}
-					else if (Float.parseFloat(o1.getProperties().get("y").toString()) >
-							 Float.parseFloat(o2.getProperties().get("y").toString()))
-					{
-						return -1;
-					}
-					else
-					{
-						return 0;
-					}
-				}
-			});
 		}
 
-		boolean playerDrawn = false;
+		// draw background objects
+		for(MapObject object : this.backgroundObjectSet)
+		{
+			spriteBatch.begin();
+			spriteBatch.draw(tiledMap.getTileSets()
+									 .getTile(Integer.parseInt(object.getProperties().get("gid").toString()))
+									 .getTextureRegion(),
+							 Float.parseFloat(object.getProperties().get("x").toString()) * this.getMapScale(),
+							 Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale(),
+							 tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties()
+																				   .get("gid")
+																				   .toString())).getTextureRegion().getRegionWidth() *
+							 this.getMapScale(),
+							 tiledMap.getTileSets().getTile(Integer.parseInt(object.getProperties()
+																				   .get("gid")
+																				   .toString())).getTextureRegion().getRegionHeight() *
+							 this.getMapScale());
+			spriteBatch.end();
+		}
+
+		// draw everything else
+		boolean playerIsDrawn = false;
 		for(MapObject object : this.visibleObjectSet)
 		{
-			if(Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale() < player.getPosY() && !playerDrawn)
+			float objOrigin = Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale();
+
+			if(object.getProperties().get("originOffset") != null)
+			{
+				objOrigin = objOrigin + Float.parseFloat(object.getProperties().get("originOffset").toString()) * this.getMapScale();
+			}
+
+			if(player.getPosY() > objOrigin && !playerIsDrawn)
 			{
 				player.draw(spriteBatch);
-				playerDrawn = true;
+				playerIsDrawn = true;
 			}
 
 			spriteBatch.begin();
@@ -267,7 +309,6 @@ public class Map
 																				   .get("gid")
 																				   .toString())).getTextureRegion().getRegionHeight() *
 							 this.getMapScale());
-
 			spriteBatch.end();
 		}
 	}
@@ -278,8 +319,9 @@ public class Map
 	 */
 	private void calculateVisibleObjects(Vector2 cameraPosition)
 	{
+		this.visibleObjectSet.clear();
 		System.out.print("Recalculating visible objects...");
-		for (MapObject object : this.objectSet)
+		for (MapObject object : this.getCurrentObjectSet(cameraPosition)) // TODO: HEAVYY!!!!!!!!!!
 		{
 			float objX = Float.parseFloat(object.getProperties().get("x").toString()) * this.getMapScale();
 			float objY = Float.parseFloat(object.getProperties().get("y").toString()) * this.getMapScale();
@@ -291,19 +333,79 @@ public class Map
 			float right = cameraPosition.x + (Gdx.graphics.getWidth() / 2);
 			float bottom = cameraPosition.y - (Gdx.graphics.getHeight() / 2);
 
-			if(((objX + objWidth) > left && objX < right) && (objY < top && (objY + objHeight) > bottom))
+
+			if(object.getProperties().get("isBackground") != null)
 			{
-				if (!this.visibleObjectSet.contains(object))
+				// background objects
+				if (((objX + objWidth) > left && objX < right) && (objY < top && (objY + objHeight) > bottom))
 				{
-					this.visibleObjectSet.add(object);
+					if (!this.backgroundObjectSet.contains(object))
+					{
+						this.backgroundObjectSet.add(object);
+					}
+				}
+				else
+				{
+					this.backgroundObjectSet.remove(object);
 				}
 			}
 			else
 			{
-				this.visibleObjectSet.remove(object);
+				// non background objects
+				if (((objX + objWidth) > left && objX < right) && (objY < top && (objY + objHeight) > bottom))
+				{
+					if (!this.visibleObjectSet.contains(object))
+					{
+						this.visibleObjectSet.add(object);
+					}
+				}
+				else
+				{
+					this.visibleObjectSet.remove(object);
+				}
+
 			}
 		}
 		System.out.println(this.visibleObjectSet.size());
+
+		Collections.sort(this.visibleObjectSet, new Comparator<MapObject>()
+		{
+			@Override
+			public int compare(MapObject o1, MapObject o2)
+			{
+				float o1Origin = Float.parseFloat(o1.getProperties().get("y").toString());
+				float o2Origin = Float.parseFloat(o2.getProperties().get("y").toString());
+
+				if(o1.getProperties().get("originOffset") != null)
+				{
+					o1Origin = o1Origin +
+							   Float.parseFloat(o1.getProperties()
+												  .get("originOffset")
+												  .toString());
+				}
+
+				if(o2.getProperties().get("originOffset") != null)
+				{
+					o2Origin = o2Origin +
+							   Float.parseFloat(o2.getProperties()
+												  .get("originOffset")
+												  .toString());
+				}
+
+				if (o1Origin < o2Origin)
+				{
+					return 1;
+				}
+				else if (o1Origin > o2Origin)
+				{
+					return -1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+		});
 	}
 
 	/**
