@@ -437,18 +437,18 @@ public class Player
 	{
 		if(getCurrentAction().equals(currentAction)) return;
 
-		if(this.getCurrentAction().hasSound() && this.getCurrentAction().getSound().isPlaying())
-		{
-			this.getCurrentAction().getSound().stop();
-		}
+//		if(this.getCurrentAction().hasSound() && this.getCurrentAction().getSound().isPlaying())
+//		{
+//			this.getCurrentAction().getSound().stop();
+//		}
 
 		this.setStateTime(0.0f);
 		this.currentAction = currentAction;
 
-		if(this.getCurrentAction().hasSound() && !this.getCurrentAction().getSound().isPlaying())
-		{
-			this.getCurrentAction().getSound().play();
-		}
+//		if(this.getCurrentAction().hasSound() && !this.getCurrentAction().getSound().isPlaying())
+//		{
+//			this.getCurrentAction().getSound().play();
+//		}
 	}
 
 	/**

@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -54,6 +56,8 @@ public class GameScreen implements Screen
 	private ImageButton.ImageButtonStyle blockButtonStyle;
 	private Drawable blockButtonDrawable;
 	private Drawable blockButtonActiveDrawable;
+
+//	private ShapeRenderer sr = new ShapeRenderer();
 
 	public GameScreen(Despair game)
 	{
@@ -169,6 +173,25 @@ public class GameScreen implements Screen
 		{
 			this.exit();
 		}
+
+
+//		int tileWidth = 128 * 4;
+//		int mapWidth = 4096 * 4;
+//		sr.setProjectionMatrix(camera.combined);
+//		sr.begin(ShapeRenderer.ShapeType.Line);
+//
+//		for (int x = 0; x < mapWidth; x += tileWidth)
+//		{
+//			sr.line(x, 0, x, 4096 * 4);
+//		}
+//
+//
+//		for (int y = 0; y < 4096 * 4; y += 128 * 4)
+//		{
+//			sr.line(0, y, mapWidth, y);
+//		}
+//
+//		sr.end();
 	}
 
 	private void updateMap()

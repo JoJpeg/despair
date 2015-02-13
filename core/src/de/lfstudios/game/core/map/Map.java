@@ -41,7 +41,7 @@ public class Map
 	private static final String MAP_HOLE_DARK = "hole_dark";
 	private static final String MAP_HOLE_LIGHT = "hole_light";
 
-//	private HashSet<MapObject>[][] chunkSet = new HashSet[32][32];
+	private HashSet<MapObject>[][] chunkSet = new HashSet[32][32];
 
 	private HashSet<MapObject> objectSet = new HashSet<MapObject>();
 
@@ -89,29 +89,29 @@ public class Map
 		this.setupCollision("grass_light");
 		this.setupCollision("stream_light");
 
-//		this.generateChunks();
+		this.generateChunks();
 	}
 
-//	private void generateChunks()
-//	{
-//		int i, j;
-//
-//		for(i = 0; i < 32; i++)
-//		{
-//			for(j = 0; j < 32; j++)
-//			{
-//				this.chunkSet[i][j] = new HashSet<MapObject>();
-//			}
-//		}
-//
-//		for(MapObject object : this.objectSet)
-//		{
-//			int chunkX = (int) (Float.parseFloat(object.getProperties().get("x").toString()) / 128);
-//			int chunkY = (int) (Float.parseFloat(object.getProperties().get("y").toString()) / 128);
-//
-//			this.chunkSet[chunkX][chunkY].add(object);
-//		}
-//	}
+	private void generateChunks()
+	{
+		int i, j;
+
+		for(i = 0; i < 32; i++)
+		{
+			for(j = 0; j < 32; j++)
+			{
+				this.chunkSet[i][j] = new HashSet<MapObject>();
+			}
+		}
+
+		for(MapObject object : this.objectSet)
+		{
+			int chunkX = (int) (Float.parseFloat(object.getProperties().get("x").toString()) / 128);
+			int chunkY = (int) (Float.parseFloat(object.getProperties().get("y").toString()) / 128);
+
+			this.chunkSet[chunkX][chunkY].add(object);
+		}
+	}
 
 	/**
 	 *
@@ -119,6 +119,18 @@ public class Map
 	 */
 	private HashSet<MapObject> getCurrentObjectSet(Vector2 cameraPosition)
 	{
+		HashSet<MapObject> currentObjectSet = new HashSet<MapObject>();
+
+		int cameraPosX = (int) cameraPosition.x / 512;
+		int cameraPosY = (int) cameraPosition.y / 512;
+
+		currentObjectSet = this.chunkSet[cameraPosX][cameraPosY];
+
+//		System.out.println("CURRENT CAM POS:" + cameraPosX + " " + cameraPosY);
+
+
+//		return currentObjectSet;
+
 		return this.objectSet;
 	}
 
@@ -320,6 +332,7 @@ public class Map
 	private void calculateVisibleObjects(Vector2 cameraPosition)
 	{
 		this.visibleObjectSet.clear();
+		this.backgroundObjectSet.clear();
 		System.out.print("Recalculating visible objects...");
 		for (MapObject object : this.getCurrentObjectSet(cameraPosition)) // TODO: HEAVYY!!!!!!!!!!
 		{
@@ -337,7 +350,7 @@ public class Map
 			if(object.getProperties().get("isBackground") != null)
 			{
 				// background objects
-				if (((objX + objWidth) > left && objX < right) && (objY < top && (objY + objHeight) > bottom))
+				if (((objX + objWidth) > left -200 && objX < right +200) && (objY < top +200 && (objY + objHeight) > bottom - 200))
 				{
 					if (!this.backgroundObjectSet.contains(object))
 					{
@@ -352,7 +365,7 @@ public class Map
 			else
 			{
 				// non background objects
-				if (((objX + objWidth) > left && objX < right) && (objY < top && (objY + objHeight) > bottom))
+				if (((objX + objWidth) > left -200 && objX < right +200) && (objY < top +200 && (objY + objHeight) > bottom - 200))
 				{
 					if (!this.visibleObjectSet.contains(object))
 					{
@@ -366,7 +379,7 @@ public class Map
 
 			}
 		}
-		System.out.println(this.visibleObjectSet.size());
+		System.out.println(this.visibleObjectSet.size() + this.backgroundObjectSet.size());
 
 		Collections.sort(this.visibleObjectSet, new Comparator<MapObject>()
 		{
